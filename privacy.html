@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificaat – Spirituele Website Julia</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+    font-family: 'Georgia', 'Times New Roman', serif;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* STERRENHEMEL ANIMATIE */
+@keyframes move-stars {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-2000px); }
+}
+
+@keyframes twinkle {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@keyframes shooting-star {
+    0% { transform: translateX(0) translateY(0) rotate(45deg); opacity: 1; }
+    100% { transform: translateX(1000px) translateY(1000px) rotate(45deg); opacity: 0; }
+}
+
+/* STERREN LAAG 1 - Kleine, langzaam twinkelende sterren */
+.stars, .stars2, .stars3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.stars {
+    background: transparent url('data:image/svg+xml;utf8,<svg width="3" height="3" viewBox="0 0 3 3" xmlns="http://www.w3.org/2000/svg"><circle cx="1.5" cy="1.5" r="0.8" fill="white" opacity="0.8"/></svg>') repeat;
+    background-size: 50px 50px;
+    animation: move-stars 200s linear infinite;
+    opacity: 0.8;
+}
+
+.stars2 {
+    background: transparent url('data:image/svg+xml;utf8,<svg width="4" height="4" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg"><circle cx="2" cy="2" r="1" fill="white" opacity="0.6"/></svg>') repeat;
+    background-size: 100px 100px;
+    animation: move-stars 300s linear infinite;
+    opacity: 0.6;
+}
+
+.stars3 {
+    background: transparent url('data:image/svg+xml;utf8,<svg width="6" height="6" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="3" r="1.5" fill="white" opacity="0.4"/></svg>') repeat;
+    background-size: 150px 150px;
+    animation: move-stars 400s linear infinite;
+    opacity: 0.4;
+}
+
+/* TWINKELENDE STERREN (extra laag) */
+.twinkling {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 1;
+    background: transparent url('data:image/svg+xml;utf8,<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><circle cx="5" cy="5" r="2" fill="white" opacity="0.3"/></svg>') repeat;
+    background-size: 200px 200px;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+/* VALLENDE STERREN */
+.shooting-stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.shooting-star {
+    position: absolute;
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0));
+    transform: rotate(45deg);
+    animation: shooting-star 3s linear infinite;
+    opacity: 0;
+}
+
+.shooting-star::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: 0;
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 2px white;
+}
+
+/* Verschillende vallende sterren met vertraging */
+.shooting-star1 { top: 10%; left: -10%; animation-delay: 0s; }
+.shooting-star2 { top: 30%; left: -20%; animation-delay: 2s; }
+.shooting-star3 { top: 50%; left: -15%; animation-delay: 4s; }
+.shooting-star4 { top: 70%; left: -25%; animation-delay: 6s; }
+.shooting-star5 { top: 20%; left: -30%; animation-delay: 8s; }
+.shooting-star6 { top: 80%; left: -5%; animation-delay: 10s; }
+.shooting-star7 { top: 40%; left: -40%; animation-delay: 12s; }
+.shooting-star8 { top: 60%; left: -50%; animation-delay: 14s; }
+
+/* CERTIFICAAT CONTAINER - hogere z-index dan sterren */
+.certificate-wrapper {
+    max-width: 1000px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    margin: 40px auto;
+    box-shadow: 0 30px 50px rgba(0,0,0,0.5), 0 0 0 2px rgba(255,255,255,0.1);
+    border-radius: 25px;
+}
+
+/* CERTIFICAAT */
+.certificate {
+    background: #fef9e7;
+    background-image: 
+        linear-gradient(rgba(210, 180, 140, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(210, 180, 140, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    padding: 50px;
+    border: 20px solid #d4af37;
+    box-shadow: inset 0 0 30px rgba(212, 175, 55, 0.3);
+    position: relative;
+    border-radius: 20px 20px 20px 20px;
+}
+
+/* GLOW EFFECT RONDOM CERTIFICAAT */
+.certificate-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+    border-radius: 35px;
+    z-index: -1;
+    animation: glow 4s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+    100% { opacity: 0.3; }
+}
+
+/* DECORATIEVE RAND */
+.certificate::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 2px solid #d4af37;
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+/* KOLOMMEN LAYOUT */
+.certificate-content {
+    display: grid;
+    grid-template-columns: 1fr 2px 1fr;
+    gap: 30px;
+    margin: 40px 0;
+    position: relative;
+}
+
+/* VERTICALE LIJN TUSSEN KOLOMMEN */
+.vertical-line {
+    background: linear-gradient(to bottom, transparent, #d4af37, #8b6917, #d4af37, transparent);
+    width: 2px;
+    height: 100%;
+    position: relative;
+}
+
+.vertical-line::before,
+.vertical-line::after {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #d4af37;
+    font-size: 20px;
+    background: #fef9e7;
+    padding: 5px;
+}
+
+.vertical-line::before {
+    top: -15px;
+}
+
+.vertical-line::after {
+    bottom: -15px;
+}
+
+/* KOLOM STIJLEN */
+.left-column, .right-column {
+    padding: 20px;
+}
+
+/* CERTIFICAAT HEADER */
+.certificate-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.certificate-header h1 {
+    font-size: 48px;
+    color: #8b6917;
+    text-transform: uppercase;
+    letter-spacing: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+    margin-bottom: 10px;
+}
+
+.certificate-header h2 {
+    font-size: 24px;
+    color: #4a3c2c;
+    font-style: italic;
+    border-bottom: 2px solid #d4af37;
+    padding-bottom: 15px;
+    display: inline-block;
+}
+
+/* SIERLIJNEN */
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.divider span {
+    font-size: 24px;
+    color: #d4af37;
+    margin: 0 10px;
+}
+
+.divider-line {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #d4af37, #8b6917, #d4af37, transparent);
+    flex: 1;
+}
+
+/* TEKST STIJLEN */
+.certificate-title {
+    font-size: 36px;
+    color: #4a3c2c;
+    text-align: center;
+    margin: 30px 0;
+    font-family: 'Brush Script MT', cursive;
+}
+
+.recipient-name {
+    font-size: 48px;
+    color: #2c3e50;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Brush Script MT', cursive;
+    border-bottom: 2px dashed #d4af37;
+    padding-bottom: 10px;
+    display: inline-block;
+    width: 100%;
+}
+
+.certificate-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #2c3e50;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* COLOM SPECIFIEK */
+.left-column .section {
+    margin-bottom: 30px;
+}
+
+.left-column h3 {
+    color: #8b6917;
+    font-size: 22px;
+    border-left: 4px solid #d4af37;
+    padding-left: 15px;
+    margin-bottom: 15px;
+}
+
+.left-column ul {
+    list-style: none;
+}
+
+.left-column li {
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.left-column li::before {
+    content: '✦';
+    color: #d4af37;
+    font-size: 18px;
+}
+
+.right-column .info-item {
+    margin-bottom: 25px;
+}
+
+.right-column .info-label {
+    font-weight: bold;
+    color: #8b6917;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.right-column .info-value {
+    font-size: 18px;
+    color: #2c3e50;
+    border-bottom: 1px solid #e0d7f1;
+    padding-bottom: 5px;
+}
+
+/* STEMPEL */
+.stamp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0 20px;
+    position: relative;
+}
+
+.stamp {
+    width: 150px;
+    height: 150px;
+    border: 4px solid #d43f3f;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(-15deg);
+    opacity: 0.9;
+    background: rgba(212, 63, 63, 0.05);
+    position: relative;
+    animation: stampAppear 1s ease;
+}
+
+@keyframes stampAppear {
+    from {
+        transform: rotate(-15deg) scale(0.5);
+        opacity: 0;
+    }
+    to {
+        transform: rotate(-15deg) scale(1);
+        opacity: 0.9;
+    }
+}
+
+.stamp::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 2px dotted #d43f3f;
+    border-radius: 50%;
+}
+
+.stamp .stamp-text {
+    color: #d43f3f;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 18px;
+    letter-spacing: 2px;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.stamp .stamp-date {
+    color: #d43f3f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* MEERDERE STEMPELS */
+.stamp-group {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.stamp-small {
+    width: 80px;
+    height: 80px;
+    border: 3px solid #4b3b6c;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transform: rotate(5deg);
+    background: rgba(75, 59, 108, 0.05);
+    font-size: 10px;
+    color: #4b3b6c;
+    text-align: center;
+}
+
+.stamp-small::before {
+    content: '★';
+    font-size: 24px;
+    color: #4b3b6c;
+    margin-bottom: 5px;
+}
+
+/* HANDTEKENINGEN */
+.signatures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin: 40px 0;
+}
+
+.signature-item {
+    text-align: center;
+}
+
+.signature-line {
+    width: 200px;
+    height: 2px;
+    background: #2c3e50;
+    margin: 10px auto;
+    position: relative;
+}
+
+.signature-line::before {
+    content: '✧';
+    position: absolute;
+    left: -15px;
+    top: -10px;
+    color: #d4af37;
+    font-size: 20px;
+}
+
+.signature-line::after {
+    content: '✧';
+    position: absolute;
+    right: -15px;
+    top: -10px;
+    color: #d4af37;
+    font-size: 20px;
+}
+
+.signature-name {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 24px;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.signature-title {
+    font-size: 14px;
+    color: #666;
+}
+
+/* CERTIFICAAT NUMMER */
+.certificate-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 14px;
+    color: #d4af37;
+    font-family: monospace;
+}
+
+/* GOUDEN ZEGEL */
+.gold-seal {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #d4af37, #8b6917);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 2px solid white;
+}
+
+.gold-seal::after {
+    content: '★';
+    position: absolute;
+    font-size: 30px;
+    opacity: 0.3;
+    color: white;
+}
+
+/* WATERMERK */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 120px;
+    opacity: 0.03;
+    color: #8b6917;
+    font-family: 'Brush Script MT', cursive;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* DECORATIEVE CORNERS */
+.corner {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #d4af37;
+    opacity: 0.5;
+}
+
+.corner-tl {
+    top: 20px;
+    left: 20px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.corner-tr {
+    top: 20px;
+    right: 20px;
+    border-left: none;
+    border-bottom: none;
+}
+
+.corner-bl {
+    bottom: 20px;
+    left: 20px;
+    border-right: none;
+    border-top: none;
+}
+
+.corner-br {
+    bottom: 20px;
+    right: 20px;
+    border-left: none;
+    border-top: none;
+}
+
+/* MAAN (extra decoratie voor sterrenhemel) */
+.moon {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #fff5d1, #f0e6c5);
+    border-radius: 50%;
+    box-shadow: 0 0 50px #fff5d1, 0 0 100px rgba(255, 245, 209, 0.3);
+    z-index: 5;
+    opacity: 0.8;
+    animation: moonGlow 6s ease-in-out infinite;
+}
+
+@keyframes moonGlow {
+    0% { box-shadow: 0 0 50px #fff5d1, 0 0 100px rgba(255, 245, 209, 0.3); }
+    50% { box-shadow: 0 0 70px #fff5d1, 0 0 140px rgba(255, 245, 209, 0.5); }
+    100% { box-shadow: 0 0 50px #fff5d1, 0 0 100px rgba(255, 245, 209, 0.3); }
+}
+
+.moon::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 15px;
+    height: 15px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 50%;
+}
+
+/* BUTTONS */
+.print-btn {
+    text-align: center;
+    margin-top: 30px;
+}
+
+button {
+    background: linear-gradient(135deg, #4b3b6c, #6e5ca0);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 16px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin: 0 10px;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* PRINT STIJL */
+@media print {
+    body {
+        background: white;
+        padding: 0;
+    }
+    
+    .stars, .stars2, .stars3, .twinkling, .shooting-stars, .moon {
+        display: none;
+    }
+    
+    .certificate {
+        border: 2px solid black;
+        box-shadow: none;
+    }
+    
+    button {
+        display: none;
+    }
+    
+    .stamp, .stamp-small {
+        opacity: 0.5;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+    .certificate-content {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    
+    .vertical-line {
+        display: none;
+    }
+    
+    .certificate {
+        padding: 20px;
+    }
+    
+    .certificate-header h1 {
+        font-size: 32px;
+    }
+    
+    .recipient-name {
+        font-size: 36px;
+    }
+    
+    .signatures {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .moon {
+        width: 40px;
+        height: 40px;
+        top: 20px;
+        right: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- STERRENHEMEL LAGEN -->
+<div class="stars"></div>
+<div class="stars2"></div>
+<div class="stars3"></div>
+<div class="twinkling"></div>
+
+<!-- VALLENDE STERREN -->
+<div class="shooting-stars">
+    <div class="shooting-star shooting-star1"></div>
+    <div class="shooting-star shooting-star2"></div>
+    <div class="shooting-star shooting-star3"></div>
+    <div class="shooting-star shooting-star4"></div>
+    <div class="shooting-star shooting-star5"></div>
+    <div class="shooting-star shooting-star6"></div>
+    <div class="shooting-star shooting-star7"></div>
+    <div class="shooting-star shooting-star8"></div>
+</div>
+
+<!-- MAAN -->
+<div class="moon"></div>
+
+<div class="certificate-wrapper">
+    <!-- Certificaat -->
+    <div class="certificate" id="certificate">
+        
+        <!-- Watermerk -->
+        <div class="watermark">Certified</div>
+        
+        <!-- Gouden zegel -->
+        <div class="gold-seal">
+            SPIRITUAL<br>MASTER
+        </div>
+        
+        <!-- Decoratieve hoeken -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <!-- Certificaat nummer -->
+        <div class="certificate-number">CERT-2026-001</div>
+        
+        <!-- Header -->
+        <div class="certificate-header">
+            <h1>JULIA'S SPIRITUELE ACADEMIE</h1>
+            <h2>Certificaat van Afronding</h2>
+        </div>
+        
+        <!-- Titel -->
+        <div class="certificate-title">
+            <div class="divider">
+                <span class="divider-line"></span>
+                <span>✧</span>
+                <span class="divider-line"></span>
+            </div>
+            <div>Hiermede wordt verklaard dat</div>
+        </div>
+        
+        <!-- Naam -->
+        <div class="recipient-name">
+            Julia van den Berg
+        </div>
+        
+        <!-- Tekst -->
+        <div class="certificate-text">
+            succesvol heeft deelgenomen aan en voldaan heeft aan alle eisen van de opleiding
+        </div>
+        
+        <!-- Opleiding -->
+        <div class="certificate-title" style="font-size: 28px; color: #8b6917;">
+            Spiritueel Meesterschap
+        </div>
+        
+        <!-- KOLOMMEN LAYOUT MET VERTICALE LIJN -->
+        <div class="certificate-content">
+            <!-- Linker kolom - Cursus inhoud -->
+            <div class="left-column">
+                <div class="section">
+                    <h3>✦ Afgeronde modules ✦</h3>
+                    <ul>
+                        <li>Meditatie & Mindfulness - Gevorderd</li>
+                        <li>Engelenboodschappen interpreteren</li>
+                        <li>Orakelkaart lezingen</li>
+                        <li>Reiki niveau 1 & 2</li>
+                        <li>Chakra healing technieken</li>
+                        <li>Spirituele coaching</li>
+                        <li>Aura lezen & reinigen</li>
+                        <li>Kristallen therapie</li>
+                    </ul>
+                </div>
+                
+                <div class="section">
+                    <h3>✦ Behaalde resultaten ✦</h3>
+                    <ul>
+                        <li>Theorie: 96%</li>
+                        <li>Praktijk: 94%</li>
+                        <li>Stage-uren: 120 uur</li>
+                        <li>Eindpresentatie: Met lof</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Verticale scheidingslijn met sterren -->
+            <div class="vertical-line"></div>
+            
+            <!-- Rechter kolom - Certificaat details -->
+            <div class="right-column">
+                <div class="info-item">
+                    <div class="info-label">Datum van uitreiking</div>
+                    <div class="info-value">14 maart 2026</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Locatie</div>
+                    <div class="info-value">Amsterdam, Nederland</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Studiebelasting</div>
+                    <div class="info-value">200 uur</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Niveau</div>
+                    <div class="info-value">Master - Niveau 4</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Accreditatie</div>
+                    <div class="info-value">SNRO - 123456</div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-label">Geldig tot</div>
+                    <div class="info-value">Levenslang</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- STEMPELS - Meerdere stempels voor authentieke look -->
+        <div class="stamp-group">
+            <div class="stamp-small">
+                <span>GECERTIFICEERD</span>
+            </div>
+            
+            <div class="stamp-container">
+                <div class="stamp">
+                    <div class="stamp-text">JULIA'S<br>SPIRITUELE<br>ACADEMIE</div>
+                    <div class="stamp-date">2026</div>
+                </div>
+            </div>
+            
+            <div class="stamp-small">
+                <span>OFFICIEEL</span>
+            </div>
+        </div>
+        
+        <!-- Handtekeningen -->
+        <div class="signatures">
+            <div class="signature-item">
+                <div class="signature-line"></div>
+                <div class="signature-name">Julia</div>
+                <div class="signature-title">Oprichter & Hoofddocent</div>
+                <div style="font-size: 12px; color: #999;">Julia Spirituele Academie</div>
+            </div>
+            
+            <div class="signature-item">
+                <div class="signature-line"></div>
+                <div class="signature-name">Dr. E. Licht</div>
+                <div class="signature-title">Extern Examinator</div>
+                <div style="font-size: 12px; color: #999;">Spirituele Raad Nederland</div>
+            </div>
+        </div>
+        
+        <!-- Extra stempel onderaan -->
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <div style="background: #d4af37; color: white; padding: 5px 15px; border-radius: 30px; font-size: 12px; transform: rotate(-2deg);">
+                ✦ Geregistreerd bij Spirituele Raad ✦
+            </div>
+        </div>
+    </div>
+    
+    <!-- Print en download knoppen -->
+    <div class="print-btn">
+        <button onclick="window.print()">🖨️ Print Certificaat</button>
+        <button onclick="downloadCertificate()">📥 Download als PDF</button>
+        <button onclick="generateNew()">✨ Nieuw Certificaat</button>
+    </div>
+</div>
+
+<script>
+// Functie om certificaat te downloaden als PDF (via browser print)
+function downloadCertificate() {
+    window.print();
+}
+
+// Functie om een nieuw certificaat te genereren met willekeurige gegevens
+function generateNew() {
+    const names = [
+        'Emma de Vries', 'Lucas Bakker', 'Sophie van Dijk', 'Noah Jansen',
+        'Mila Hendriks', 'Levi Visser', 'Nora de Wit', 'Luuk Bosman',
+        'Sara Mulder', 'Daan Smit', 'Evi van den Berg', 'Thomas Vos'
+    ];
+    
+    const courses = [
+        'Spiritueel Meesterschap',
+        'Reiki Master',
+        'Engelen Therapeut',
+        'Meditatie Leraar',
+        'Kristallen Genezer',
+        'Aura Lezer',
+        'Tarot Expert',
+        'Chakra Healer'
+    ];
+    
+    const dates = [
+        '14 maart 2026', '21 maart 2026', '28 maart 2026', 
+        '4 april 2026', '11 april 2026', '18 april 2026'
+    ];
+    
+    const percentages = ['96%', '94%', '98%', '92%', '97%', '93%', '95%'];
+    const hours = ['120', '150', '180', '200', '160', '140'];
+    const certNumbers = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010'];
+    
+    // Willekeurige selectie
+    const randomName = names[Math.floor(Math.random() * names.length)];
+    const randomCourse = courses[Math.floor(Math.random() * courses.length)];
+    const randomDate = dates[Math.floor(Math.random() * dates.length)];
+    const randomPercent = percentages[Math.floor(Math.random() * percentages.length)];
+    const randomHours = hours[Math.floor(Math.random() * hours.length)];
+    const randomCert = certNumbers[Math.floor(Math.random() * certNumbers.length)];
+    
+    // Update certificaat
+    document.querySelector('.recipient-name').textContent = randomName;
+    document.querySelector('.certificate-title:last-of-type').innerHTML = randomCourse;
+    document.querySelector('.certificate-number').textContent = `CERT-2026-${randomCert}`;
+    
+    // Update de kolom gegevens
+    const leftCol = document.querySelector('.left-column');
+    leftCol.querySelector('ul').innerHTML = `
+        <li>Meditatie & Mindfulness - Gevorderd</li>
+        <li>Engelenboodschappen interpreteren</li>
+        <li>Orakelkaart lezingen</li>
+        <li>Spirituele coaching</li>
+    `;
+    
+    leftCol.querySelectorAll('ul')[1].innerHTML = `
+        <li>Theorie: ${randomPercent}</li>
+        <li>Praktijk: ${Math.floor(Math.random() * 10 + 90)}%</li>
+        <li>Stage-uren: ${randomHours} uur</li>
+        <li>Eindpresentatie: ${['Met lof', 'Excellent', 'Zeer goed', 'Uitstekend'][Math.floor(Math.random() * 4)]}</li>
+    `;
+    
+    // Update rechter kolom
+    const rightCol = document.querySelector('.right-column');
+    rightCol.querySelectorAll('.info-value')[0].textContent = randomDate;
+    
+    // Update stempel datum
+    document.querySelector('.stamp-date').textContent = new Date().getFullYear();
+    
+    // Toon melding
+    alert(`✨ Nieuw certificaat gegenereerd voor ${randomName}!`);
+}
+
+// Functie om certificaat aan te passen (voor docenten)
+function editCertificate() {
+    const newName = prompt('Voer de naam in:', document.querySelector('.recipient-name').textContent);
+    if (newName) {
+        document.querySelector('.recipient-name').textContent = newName;
+    }
+    
+    const newCourse = prompt('Voer de cursus in:', document.querySelector('.certificate-title:last-of-type').textContent);
+    if (newCourse) {
+        document.querySelector('.certificate-title:last-of-type').innerHTML = newCourse;
+    }
+    
+    alert('✅ Certificaat aangepast!');
+}
+
+// Toetsenbord sneltoets voor edit (Ctrl+E)
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.key === 'e') {
+        e.preventDefault();
+        editCertificate();
+    }
+});
+
+// Laad willekeurig certificaat bij start
+window.onload = function() {
+    console.log('Certificaat geladen - Druk op Ctrl+E om te bewerken');
+};
+</script>
+
+</body>
+</html>

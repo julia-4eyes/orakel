@@ -1,0 +1,474 @@
+```html
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spirituele Webwinkel</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+font-family:Arial;
+margin:0;
+background:#f6f3fb;
+color:#333;
+}
+
+/* HEADER */
+
+header{
+background:#111;
+color:white;
+padding:16px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.cart-btn{
+background:#333;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* FILTER */
+
+.filters{
+padding:15px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+}
+
+.filters button{
+background:#444;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+}
+
+.filters input{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+/* PRODUCT GRID */
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fill,260px);
+gap:20px;
+justify-content:center;
+padding:20px;
+}
+
+/* PRODUCT CARD */
+
+.product{
+background:white;
+width:260px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+display:flex;
+flex-direction:column;
+}
+
+.product img{
+width:100%;
+height:180px;
+object-fit:cover;
+border-top-left-radius:10px;
+border-top-right-radius:10px;
+}
+
+.product-info{
+padding:15px;
+display:flex;
+flex-direction:column;
+flex-grow:1;
+text-align:center;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+margin:10px 0;
+}
+
+button{
+background:black;
+color:white;
+border:none;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* REVIEWS */
+
+.reviews{
+margin-top:10px;
+text-align:left;
+font-size:13px;
+}
+
+.review{
+border-top:1px solid #eee;
+padding:5px 0;
+}
+
+/* CART */
+
+.cart{
+position:fixed;
+top:0;
+right:0;
+width:400px;
+height:100%;
+background:white;
+box-shadow:-4px 0 10px rgba(0,0,0,0.2);
+padding:20px;
+overflow:auto;
+display:none;
+}
+
+.cart.open{
+display:block;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+td{
+padding:8px;
+border-bottom:1px solid #ddd;
+}
+
+.total{
+font-size:20px;
+font-weight:bold;
+margin-top:10px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+.products{
+grid-template-columns:1fr;
+}
+
+.product{
+width:95%;
+margin:auto;
+}
+
+.cart{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h3>Spirituele Webwinkel</h3>
+
+<div class="cart-btn" onclick="toggleCart()">
+🛒 (<span id="count">0</span>)
+</div>
+
+</header>
+
+<div class="filters">
+
+<button onclick="filterCategory('all')">Alles</button>
+<button onclick="filterCategory('tarot')">Tarot</button>
+<button onclick="filterCategory('wierrook')">Wierrook</button>
+
+<input id="search" placeholder="Zoeken..." onkeyup="searchProducts()">
+
+</div>
+
+<div class="products">
+
+<!-- PRODUCT -->
+
+<div class="product" data-category="tarot">
+
+<img src="tarot1-sm.jpg">
+
+<div class="product-info">
+
+<h3>Gouden Eeuw Tarot</h3>
+
+<div class="price">€18</div>
+
+<button onclick="addToCart('Gouden Eeuw Tarot',18)">Bestellen</button>
+
+<div class="reviews" id="reviews-Gouden Eeuw Tarot"></div>
+
+<input placeholder="Review..." id="input-Gouden Eeuw Tarot">
+<button onclick="addReview('Gouden Eeuw Tarot')">Plaats review</button>
+
+</div>
+
+</div>
+
+<div class="product" data-category="tarot">
+
+<img src="tarot2-sm.jpg">
+
+<div class="product-info">
+
+<h3>Starry Night Tarot</h3>
+
+<div class="price">€8</div>
+
+<button onclick="addToCart('Starry Night Tarot',8)">Bestellen</button>
+
+<div class="reviews" id="reviews-Starry Night Tarot"></div>
+
+<input placeholder="Review..." id="input-Starry Night Tarot">
+<button onclick="addReview('Starry Night Tarot')">Plaats review</button>
+
+</div>
+
+</div>
+
+<div class="product" data-category="wierrook">
+
+<img src="wierrook1-sm.jpg">
+
+<div class="product-info">
+
+<h3>Wierrook Meditation</h3>
+
+<div class="price">€8.50</div>
+
+<button onclick="addToCart('Wierrook Meditation',8.5)">Bestellen</button>
+
+<div class="reviews" id="reviews-Wierrook Meditation"></div>
+
+<input placeholder="Review..." id="input-Wierrook Meditation">
+<button onclick="addReview('Wierrook Meditation')">Plaats review</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CART -->
+
+<div class="cart" id="cart">
+
+<h2>Winkelwagen</h2>
+
+<table>
+<tbody id="cart-items"></tbody>
+</table>
+
+<div>Verzendkosten: €<span id="shipping">0</span></div>
+
+<div class="total">
+Totaal: €<span id="total">0</span>
+</div>
+
+<button onclick="checkout()">Bestellen via WhatsApp</button>
+
+</div>
+
+<script>
+
+/* CART */
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart(){
+localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+function addToCart(name,price){
+
+let item=cart.find(p=>p.name===name)
+
+if(item){item.qty++}
+else{cart.push({name,price,qty:1})}
+
+updateCart()
+saveCart()
+
+}
+
+function updateCart(){
+
+let list=document.getElementById("cart-items")
+list.innerHTML=""
+
+let total=0
+let count=0
+
+cart.forEach((item,i)=>{
+
+let itemTotal=item.price*item.qty
+
+total+=itemTotal
+count+=item.qty
+
+let row=document.createElement("tr")
+
+row.innerHTML=`
+<td>${item.name}</td>
+<td>${item.qty}</td>
+<td>€${itemTotal.toFixed(2)}</td>
+<td><button onclick="removeItem(${i})">X</button></td>
+`
+
+list.appendChild(row)
+
+})
+
+/* SHIPPING */
+
+let shipping=0
+
+if(total>0 && total<50){
+shipping=4.95
+}
+
+document.getElementById("shipping").innerText=shipping.toFixed(2)
+
+let final=total+shipping
+
+document.getElementById("total").innerText=final.toFixed(2)
+
+document.getElementById("count").innerText=count
+
+}
+
+function removeItem(i){
+cart.splice(i,1)
+updateCart()
+saveCart()
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("open")
+}
+
+/* WHATSAPP */
+
+function checkout(){
+
+let text="Bestelling:%0A"
+
+cart.forEach(item=>{
+text+=`${item.name} x${item.qty}%0A`
+})
+
+text+=`%0ATotaal €${document.getElementById("total").innerText}`
+
+window.open("https://wa.me/?text="+text)
+
+}
+
+/* REVIEWS */
+
+let reviews=JSON.parse(localStorage.getItem("reviews")) || {}
+
+function addReview(product){
+
+let input=document.getElementById("input-"+product)
+
+if(!input.value)return
+
+if(!reviews[product])reviews[product]=[]
+
+reviews[product].push(input.value)
+
+localStorage.setItem("reviews",JSON.stringify(reviews))
+
+input.value=""
+
+loadReviews()
+
+}
+
+function loadReviews(){
+
+Object.keys(reviews).forEach(product=>{
+
+let div=document.getElementById("reviews-"+product)
+
+if(!div)return
+
+div.innerHTML=""
+
+reviews[product].forEach(r=>{
+
+let p=document.createElement("div")
+p.className="review"
+p.innerText=r
+
+div.appendChild(p)
+
+})
+
+})
+
+}
+
+loadReviews()
+updateCart()
+
+/* SEARCH */
+
+function searchProducts(){
+
+let value=document.getElementById("search").value.toLowerCase()
+
+document.querySelectorAll(".product").forEach(p=>{
+
+p.style.display=p.innerText.toLowerCase().includes(value)?"flex":"none"
+
+})
+
+}
+
+/* FILTER */
+
+function filterCategory(cat){
+
+document.querySelectorAll(".product").forEach(p=>{
+
+if(cat==="all"||p.dataset.category===cat)
+p.style.display="flex"
+else
+p.style.display="none"
+
+})
+
+}
+
+</script>
+
+</body>
+</html>
+```

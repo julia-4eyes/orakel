@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spirituele Webwinkel</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, sans-serif;
+margin:0;
+background: linear-gradient(to bottom, #f5f0f8, #e0d7f1);
+color:#4b3b6c;
+}
+
+/* HEADER */
+
+header{
+background:#111;
+color:white;
+padding:20px 40px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+}
+
+header h1{
+margin:0;
+font-size:24px;
+}
+
+.cart-btn{
+cursor:pointer;
+font-size:18px;
+background:#222;
+padding:8px 15px;
+border-radius:6px;
+}
+
+/* SEARCH */
+
+.search{
+margin:20px auto;
+max-width:400px;
+display:block;
+padding:10px;
+width:90%;
+border-radius:8px;
+border:none;
+box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* CONTAINER */
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+/* PRODUCT */
+
+.product{
+background:white;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 10px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.product:hover{
+transform:translateY(-6px);
+}
+
+.product img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
+
+.product-info{
+padding:20px;
+text-align:center;
+}
+
+.product h3{
+margin:10px 0;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+button{
+background:black;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:0.85;
+}
+
+/* CART */
+
+.cart{
+position:fixed;
+right:-400px;
+top:0;
+width:360px;
+height:100%;
+background:white;
+box-shadow:-5px 0 20px rgba(0,0,0,0.2);
+padding:25px;
+transition:0.4s;
+overflow-y:auto;
+z-index:1000;
+}
+
+.cart.open{
+right:0;
+}
+
+.cart-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.close-cart{
+background:black;
+color:white;
+border:none;
+width:30px;
+height:30px;
+border-radius:50%;
+cursor:pointer;
+}
+
+/* CART ITEMS */
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+border-bottom:1px solid #eee;
+padding-bottom:8px;
+}
+
+.qty{
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.qty button{
+padding:4px 8px;
+}
+
+.remove{
+background:red;
+font-size:12px;
+padding:4px 8px;
+}
+
+.total{
+font-size:20px;
+font-weight:bold;
+margin-top:20px;
+}
+
+.checkout{
+margin-top:15px;
+width:100%;
+background:green;
+padding:12px;
+font-size:16px;
+}
+
+.clear{
+margin-top:10px;
+background:#444;
+width:100%;
+}
+
+/* FOOTER */
+
+footer{
+text-align:center;
+padding:20px;
+margin-top:40px;
+background:#eee;
+font-size:14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>Spirituele Webwinkel</h1>
+
+<div class="cart-btn" onclick="toggleCart()">
+🛒 Cart (<span id="count">0</span>)
+</div>
+
+</header>
+
+<input type="text" class="search" placeholder="Zoek product..." onkeyup="searchProducts(this.value)">
+
+<div class="container">
+
+<div class="products" id="products">
+
+<div class="product">
+<img src="tarot1-sm.jpg">
+<div class="product-info">
+<h3>Gouden Eeuw Tarot</h3>
+<div class="price">€18.00</div>
+<button onclick="addToCart('Gouden Eeuw Tarot',18)">Bestellen</button>
+</div>
+</div>
+
+<div class="product">
+<img src="tarot2-sm.jpg">
+<div class="product-info">
+<h3>Starry Night Tarot</h3>
+<div class="price">€8.00</div>
+<button onclick="addToCart('Starry Night Tarot',8)">Bestellen</button>
+</div>
+</div>
+
+<div class="product">
+<img src="wierrook1-sm.jpg">
+<div class="product-info">
+<h3>Wierrook - Meditation</h3>
+<div class="price">€8.50</div>
+<button onclick="addToCart('Nag Champa Meditation',8.50)">Bestellen</button>
+</div>
+</div>
+
+<div class="product">
+<img src="wierrook2-sm.jpg">
+<div class="product-info">
+<h3>Wierrook - Festival of Flowers</h3>
+<div class="price">€8.50</div>
+<button onclick="addToCart('Nag Champa Festival of Flowers',8.50)">Bestellen</button>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 - Mijn Spirituele Website Julia (4-Eyes)
+</footer>
+
+<div class="cart" id="cart">
+
+<div class="cart-header">
+<h2>Winkelwagen</h2>
+<button class="close-cart" onclick="toggleCart()">✖</button>
+</div>
+
+<div id="cart-items"></div>
+
+<div class="total">
+Total: €<span id="total">0.00</span>
+</div>
+
+<button class="checkout" onclick="checkoutWhatsApp()">Bestellen via WhatsApp</button>
+<button class="clear" onclick="clearCart()">Leeg winkelwagen</button>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function saveCart(){
+localStorage.setItem("cart",JSON.stringify(cart));
+}
+
+function addToCart(name,price){
+
+let item = cart.find(p => p.name === name);
+
+if(item){
+item.qty++;
+}else{
+cart.push({name,price,qty:1});
+}
+
+saveCart();
+updateCart();
+
+}
+
+function changeQty(index,amount){
+
+cart[index].qty += amount;
+
+if(cart[index].qty <=0){
+cart.splice(index,1);
+}
+
+saveCart();
+updateCart();
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+saveCart();
+updateCart();
+
+}
+
+function clearCart(){
+
+cart=[];
+saveCart();
+updateCart();
+
+}
+
+function updateCart(){
+
+let cartItems = document.getElementById("cart-items");
+cartItems.innerHTML="";
+
+let total=0;
+let count=0;
+
+cart.forEach((item,index)=>{
+
+total += item.price * item.qty;
+count += item.qty;
+
+let div=document.createElement("div");
+div.classList.add("cart-item");
+
+div.innerHTML=`
+<div>
+<strong>${item.name}</strong><br>
+€${item.price.toFixed(2)}
+</div>
+
+<div class="qty">
+<button onclick="changeQty(${index},-1)">-</button>
+<span>${item.qty}</span>
+<button onclick="changeQty(${index},1)">+</button>
+</div>
+
+<div>
+€${(item.price*item.qty).toFixed(2)}
+<button class="remove" onclick="removeItem(${index})">X</button>
+</div>
+`;
+
+cartItems.appendChild(div);
+
+});
+
+document.getElementById("total").innerText = total.toFixed(2);
+document.getElementById("count").innerText = count;
+
+}
+
+function toggleCart(){
+document.getElementById("cart").classList.toggle("open");
+}
+
+function checkoutWhatsApp(){
+
+let text="Bestelling:%0A";
+
+cart.forEach(item=>{
+text += `${item.name} x${item.qty}%0A`;
+});
+
+text += `%0ATotaal: €${document.getElementById("total").innerText}`;
+
+window.open("https://wa.me/?text="+text);
+
+}
+
+function searchProducts(query){
+
+query = query.toLowerCase();
+
+document.querySelectorAll(".product").forEach(p=>{
+
+let name = p.innerText.toLowerCase();
+
+p.style.display = name.includes(query) ? "block":"none";
+
+});
+
+}
+
+updateCart();
+
+</script>
+
+</body>
+</html>

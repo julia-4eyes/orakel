@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Orakel – Spirituele Website Julia</title>
+<style>
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #000, #0c061a);
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+#stars {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: -1;
+}
+
+.star {
+position: absolute;
+width: 3px;
+height: 3px;
+background: white;
+border-radius: 50%;
+opacity: 0.8;
+animation: twinkle 3s infinite ease-in-out;
+}
+
+
+@keyframes twinkle {
+	0% { opacity: 0.2; transform: scale(0.8); }
+	50% { opacity: 1; transform: scale(1.5); }
+	100% { opacity: 0.2; transform: scale(0.8); }
+}
+
+h1 { margin-top: 3px; }
+
+#deck {
+    position: relative;
+    width: 100%;
+    height: 340px;
+    margin-top: 1px;
+}
+
+.card {
+    position: absolute;
+    width: 90px;
+    height: 150px;
+    transform-origin: bottom center;
+    transition: transform 0.8s ease;
+    cursor: pointer;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+}
+
+.card:hover {
+    transform: scale(1.1) rotate(var(--angle));
+    z-index: 10;
+}
+
+button {
+    margin-top: 3px;
+    margin-left: 8px;
+    padding: 5px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background: gold;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#musicBtn {
+position: static;
+top: 100px;
+right: 10px;
+padding: 6px 15px;
+background: gold;
+border-radius: 8px;
+border: none;
+font-weight: bold;
+cursor: pointer;
+}
+
+#overlay { 
+	position:fixed; 
+	inset:0;
+	background:rgba(0,0,0,.65); 
+	backdrop-filter:blur(4px);
+
+	display:none;
+	flex-direction:column;
+
+	justify-content:flex-start;   /* belangrijk */
+	align-items:center;
+
+	padding:20px;
+
+	overflow-y:auto;              /* scroll mogelijk maken */
+}
+
+#readingContainer {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1000px;
+}
+
+.readingCard {
+    text-align: center;
+    max-width: 220px;
+}
+
+.readingCard img {
+    width: 180px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    animation: zoomIn 0.4s ease;
+}
+
+.button-row{
+	display:flex;
+	justify-content:center;
+	gap:10px;
+	margin-top:5px;
+	flex-wrap:wrap;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.6); opacity:0; }
+    to { transform: scale(1); opacity:1; }
+}
+
+
+@keyframes shuffleMove {
+0% { transform: translateY(-150px) rotate(0deg); }
+25% { transform: translateY(-80px) rotate(20deg); }
+50% { transform: translateY(-120px) rotate(-20deg); }
+75% { transform: translateY(-60px) rotate(10deg); }
+100% { transform: translateY(-150px) rotate(0deg); }
+}
+
+.shuffle {
+animation: shuffleMove 0.6s ease-in-out;
+}
+
+.close-btn {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background: crimson;
+    border-radius: 8px;
+    border: none;
+    color: white;
+}
+
+.card-back {
+    width: 100%;
+    height: 100%;
+    background-color: #8000ff; /* paars */
+    border: 2px solid white;   /* wit randje */
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+@keyframes shake {
+  0% { transform: rotate(-5deg) translateY(0); }
+  25% { transform: rotate(5deg) translateY(-5px); }
+  50% { transform: rotate(-5deg) translateY(5px); }
+  75% { transform: rotate(5deg) translateY(-5px); }
+  100% { transform: rotate(-5deg) translateY(0); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+
+/* SECTIONS */
+
+section{
+max-width:450px;
+width:75%;
+margin:20px auto;
+padding:20px;
+color: white;
+text-align: left;
+background-color: #8000ff; /* paars */
+border-radius:10px;
+  border-style: solid;
+  border-color: white;
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<audio id="backgroundMusic" loop>
+    <source src="./native.mp3" type="audio/mpeg">
+    Je browser ondersteunt dit audio-element niet.
+</audio>
+
+<h1>🔮 Julia (4-Eyes) Orakel</h1>
+<button class="butback" onclick="goBack()">Terug naar Startpagina</button> <button id="butback" onclick="toggleMusic()">🔊 Muziek uit</button>
+
+<div id="deck"></div>
+<div class="button-row">
+    
+    <button onclick="shuffleDeck()">Schud de kaarten</button>
+
+    <button onclick="drawThreeCards()">Trek 3 kaarten</button>
+
+</div>
+
+<br>
+
+<section>
+
+<p>
+<strong>Voor je de kaart trekt</strong><br>
+Sluit je ogen. Adem langzaam in door je neus… 
+en adem rustig uit door je mond. Laat de dag even los. Voel hoe je lichaam ontspant en je gedachten stiller worden. Breng nu je aandacht naar je hart.
+
+
+</p>
+<p>
+
+<strong>Wat mag ik vandaag zien?<br>
+Welke energie begeleidt mij vandaag?<br>
+Wat wil mijn ziel mij laten begrijpen?<br><br>
+</strong>
+<strong>Schud de kaarten door op de schud knop te drukken.</strong><br>
+Klik op een kaart om 1 kaart te krijgen of gebruik de knop 3 kaarten trekken voor:<br><br>
+- Verleden<br>
+- Heden<br>
+- Toekomst
+</p>
+    <p style="margin-top:30px; font-style:italic;">
+Liefs Julia (4-Eyes) ✨
+    </p>
+</section>
+
+
+
+<div id="overlay">
+    <div id="readingContainer"></div>
+    <button class="close-btn" onclick="closeOverlay()">Sluiten</button>
+</div>
+<br>
+<script>
+const deck = document.getElementById("deck");
+const overlay = document.getElementById("overlay");
+const container = document.getElementById("readingContainer");
+
+let tarotData = [
+{ name:"Ontvouwen", img:"./2026-00.jpg", up:"Ontvouw je innerlijke wijsheid. Erken je intuitie en laat je ziel je gids zijn.", rev:"Je bent misschien te veel naar buiten aan het luisteren en te weinig naar je eigen innerlijke stem. Twijfel, ruis of oude overtuigingen kunnen je intuitie tijdelijk vertroebelen." },
+{ name:"Ware Energie", img:"./2026-01.jpg", up:"Zoals een levenskracht die zich ontvouwt, mag ook jij groeien in je eigen vorm. Laat je energie stromen en vertrouw op de richting van je ziel.", rev:"Je energie wil stromen, maar iets houdt haar tegen. Laat controle en twijfel los en vertrouw weer op de natuurlijke richting van je ziel." },
+{ name:"Nieuwe Mogelijkheden", img:"./2026-02.jpg", up:"Durf de deur te openen, zelfs als je nog niet weet wat er aan de andere kant ligt. Vaak wachten daar precies de ervaringen die je ziel nodig heeft om verder te groeien.", rev:"De weg vooruit is niet gesloten, maar je blik kan momenteel naar achteren gericht zijn. Wanneer je oude zorgen of verwachtingen loslaat, zul je merken dat de deur naar groei nog steeds openstaat en misschien al een tijdje op je wacht." },
+{ name:"Innerlijke Sterren", img:"./2026-03.jpg", up:"Vertrouw op wat zich in stilte ontvouwt. Zelfs in het donker ontstaan nieuwe sterren.", rev:"Angst voor het onbekende houdt je blik naar beneden. Sta jezelf toe weer omhoog te kijken, de sterren zijn nooit verdwenen." },
+{ name:"Kosmische Beweging", img:"./2026-04.jpg", up:"In het donker ontstaan nieuwe bewegingen. Niet alles hoeft zichtbaar te zijn om te groeien. Volg de zachte stroom van je intuïtie het licht in jou kent de weg.", rev:"Wanneer stilte verwarring brengt, keer terug naar je innerlijk licht. Daar begint de weg opnieuw." },
+{ name:"Verlichting", img:"./2026-05.jpg", up:"Er komt een moment waarop alles helderder wordt. Wat eerst verborgen leek, begint zich nu te tonen. Laat het licht van bewustzijn zacht door je gedachten en gevoelens stromen. In dat licht zie je niet alleen de waarheid om je heen, maar ook de wijsheid die altijd al in jou aanwezig was.", rev:"Soms kan te veel zoeken naar antwoorden juist mist creëren. Misschien probeer je alles te begrijpen met je hoofd, terwijl het inzicht al in je hart leeft. Sta jezelf toe om even stil te worden. Wanneer je de druk om te begrijpen loslaat, kan het licht van inzicht vanzelf weer verschijnen." },
+{ name:"The Chariot", img:"https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg", up:"Wilskracht.", rev:"Gebrek aan richting." },
+{ name:"Strength", img:"https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg", up:"Innerlijke kracht.", rev:"Onzekerheid." },
+{ name:"The Hermit", img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg", up:"Reflectie.", rev:"Isolement." },
+{ name:"Wheel of Fortune", img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg", up:"Verandering.", rev:"Tegenslag." },
+{ name:"Justice", img:"https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg", up:"Balans.", rev:"Oneerlijkheid." },
+{ name:"The Hanged Man", img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg", up:"Nieuw perspectief.", rev:"Vastzitten." },
+{ name:"Death", img:"https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg", up:"Transformatie.", rev:"Weerstand tegen verandering." },
+{ name:"Temperance", img:"https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg", up:"Harmonie.", rev:"Extremen." },
+{ name:"The Devil", img:"https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg", up:"Verleiding.", rev:"Bevrijding." },
+{ name:"The Tower", img:"https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg", up:"Plotselinge verandering.", rev:"Uitstel van verandering." },
+{ name:"The Star", img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg", up:"Hoop.", rev:"Twijfel." },
+{ name:"The Moon", img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg", up:"Intuïtie.", rev:"Verwarring." },
+{ name:"The Sun", img:"https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg", up:"Succes.", rev:"Tijdelijke neerslachtigheid." },
+{ name:"Judgement", img:"https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg", up:"Wedergeboorte.", rev:"Zelftwijfel." },
+{ name:"The World", img:"https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg", up:"Voltooiing.", rev:"Onvoltooid gevoel." }
+];
+
+
+
+function createFan() {
+    deck.innerHTML = "";
+    const spread = window.innerWidth < 600 ? 80 : 120;
+    const center = window.innerWidth / 2;
+
+    tarotData.forEach((data, index) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        const angle = -spread/2 + (spread/(tarotData.length-1))*index;
+        card.style.left = center - 45 + "px";
+        card.style.bottom = "0px";
+        card.style.transform = rotate(${angle}deg) translateY(-150px);
+
+        // Achterkant-kaart
+        const back = document.createElement("div");
+        back.classList.add("card-back");
+        back.textContent = "Orakel";
+
+        card.appendChild(back);
+
+        // Klik toont de echte kaart
+        card.onclick = () => showSingleCard(data);
+
+        deck.appendChild(card);
+    });
+}
+
+function startConfetti() {
+
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+
+    const colors = ['#ff0a54','#ff477e','#ff85a1','#fbb1b1','#f9bec7','#fae0e4'];
+
+    (function frame() {
+
+        const timeLeft = end - Date.now();
+        if (timeLeft <= 0) return;
+
+        const particleCount = 5 + Math.random() * 5;
+
+        for (let i = 0; i < particleCount; i++) {
+
+            const confetti = document.createElement('div');
+
+            confetti.style.position = 'fixed';
+            confetti.style.width = '8px';
+            confetti.style.height = '8px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+            confetti.style.top = '-10px';
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.opacity = 1;
+            confetti.style.borderRadius = '50%';
+            confetti.style.zIndex = 9999;
+            confetti.style.pointerEvents = 'none';
+
+            document.body.appendChild(confetti);
+
+            const fallDuration = 2000 + Math.random() * 2000;
+            const rotate = Math.random() * 360;
+
+            confetti.animate([
+                { transform: translateY(0px) rotate(0deg), opacity: 1 },
+                { transform: translateY(${window.innerHeight + 20}px) rotate(${rotate}deg), opacity: 0 }
+            ], {
+                duration: fallDuration,
+                easing: 'ease-out'
+            });
+
+            setTimeout(() => confetti.remove(), fallDuration);
+        }
+
+        requestAnimationFrame(frame);
+
+    })();
+}
+
+function createStars() {
+
+const starsContainer = document.getElementById("stars");
+
+for(let i = 0; i < 120; i++) {
+
+    const star = document.createElement("div");
+    star.classList.add("star");
+
+    star.style.top = Math.random() * window.innerHeight + "px";
+    star.style.left = Math.random() * window.innerWidth + "px";
+
+    star.style.animationDuration = (2 + Math.random()*4) + "s";
+
+    starsContainer.appendChild(star);
+}
+
+}
+
+createStars();
+
+function shuffleDeck() {
+
+    const cards = document.querySelectorAll(".card");
+
+    cards.forEach((card, index) => {
+
+        setTimeout(() => {
+            card.classList.add("shuffle");
+        }, index * 40);
+
+        setTimeout(() => {
+            card.classList.remove("shuffle");
+        }, 600 + index * 40);
+
+    });
+
+    // echte shuffle van de data
+    tarotData.sort(() => Math.random() - 0.5);
+
+    // nieuwe fan maken na animatie
+    setTimeout(createFan, 900);
+}
+
+function dailyCard() {
+
+    const today = new Date().toDateString();
+    let seed = today.split("").reduce((a,b)=>a+b.charCodeAt(0),0);
+
+    const index = seed % tarotData.length;
+
+	overlay.style.display = "flex";
+	startConfetti();
+
+    showSingleCard(tarotData[index]);
+}
+
+function showSingleCard(data) {
+
+    container.innerHTML = "";
+
+    const reversed = Math.random() > 0.5;
+
+    const cardDiv = document.createElement("div");
+    cardDiv.classList.add("readingCard");
+
+    const img = document.createElement("img");
+    img.src = data.img;
+    img.style.transform = reversed ? "rotate(180deg)" : "rotate(0deg)";
+
+    const title = document.createElement("h3");
+    title.textContent = data.name + (reversed ? " (Omgekeerd)" : "");
+
+    const meaning = document.createElement("p");
+    meaning.textContent = reversed ? data.rev : data.up;
+
+    cardDiv.appendChild(img);
+    cardDiv.appendChild(title);
+    cardDiv.appendChild(meaning);
+
+    container.appendChild(cardDiv);
+
+    overlay.style.display = "flex";
+    startConfetti();
+}
+
+
+
+
+function drawThreeCards() {
+    container.innerHTML = "";
+    const positions = ["Verleden", "Heden", "Toekomst"];
+
+    let shuffled = [...tarotData].sort(() => Math.random() - 0.5);
+    let selected = shuffled.slice(0,3);
+
+    selected.forEach((card, index) => {
+
+        const reversed = Math.random() > 0.5;
+
+        const cardDiv = document.createElement("div");
+        cardDiv.classList.add("readingCard");
+
+        const img = document.createElement("img");
+        img.src = card.img;
+	img.style.transform = reversed ? "rotate(180deg)" : "rotate(0deg)";
+
+
+        const title = document.createElement("h3");
+        title.textContent = positions[index] + " - " + card.name + (reversed ? " (Reversed)" : "");
+
+        const meaning = document.createElement("p");
+        meaning.textContent = reversed ? card.rev : card.up;
+
+        cardDiv.appendChild(img);
+        cardDiv.appendChild(title);
+        cardDiv.appendChild(meaning);
+
+        container.appendChild(cardDiv);
+    });
+
+    overlay.style.display = "flex";
+
+
+    const duration = 3 * 1000; // 3 seconden
+    const end = Date.now() + duration;
+
+    const colors = ['#ff0a54', '#ff477e', '#ff85a1', '#fbb1b1', '#f9bec7', '#fae0e4'];
+
+    (function frame() {
+        // Bereken hoelang nog
+        const timeLeft = end - Date.now();
+        if (timeLeft <= 0) return;
+
+        const particleCount = 5 + Math.random() * 5; // aantal confetti per frame
+        for (let i = 0; i < particleCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '8px';
+            confetti.style.height = '8px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.top = '-10px';
+            confetti.style.left = Math.random() * window.innerWidth + 'px';
+            confetti.style.opacity = 1;
+            confetti.style.borderRadius = '50%';
+            confetti.style.zIndex = 9999;
+            confetti.style.pointerEvents = 'none';
+            document.body.appendChild(confetti);
+
+            const fallDuration = 2000 + Math.random() * 2000;
+            const rotate = Math.random() * 360;
+
+            confetti.animate([
+                { transform: translateY(0px) rotate(0deg), opacity: 1 },
+                { transform: translateY(${window.innerHeight + 20}px) rotate(${rotate}deg), opacity: 0 }
+            ], {
+                duration: fallDuration,
+                easing: 'ease-out'
+            });
+
+            // Verwijder confetti na animatie
+            setTimeout(() => confetti.remove(), fallDuration);
+        }
+
+        requestAnimationFrame(frame);
+    })();
+
+}
+
+function closeOverlay() {
+    overlay.style.display = "none";
+}
+
+function goBack() {
+    window.location.href = "index.html";
+}
+
+function toggleMusic() {
+
+    const music = document.getElementById("backgroundMusic");
+    const btn = document.getElementById("butback");
+
+    if (music.paused) {
+        music.play();
+        btn.textContent = "🔊 Muziek uit";
+    } else {
+        music.pause();
+        btn.textContent = "🔇 Muziek aan";
+    }
+}
+
+createFan();
+window.addEventListener("resize", createFan);
+
+window.addEventListener("load", () => {
+    const music = document.getElementById("backgroundMusic");
+
+    music.volume = 0.1; // altijd zacht starten
+
+    const playPromise = music.play();
+    
+    if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                console.log("Achtergrondmuziek gestart");
+            })
+            .catch(() => {
+                console.log("Autoplay geblokkeerd");
+
+                const startMusic = () => {
+                    music.play();
+                    window.removeEventListener("click", startMusic);
+                };
+
+                window.addEventListener("click", startMusic);
+            });
+    }
+});
+
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

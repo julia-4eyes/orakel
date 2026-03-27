@@ -1,0 +1,653 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Privacy beleid van Julia's Spirituele Website - Lees hier hoe wij met uw gegevens omgaan.">
+<meta name="robots" content="index, follow">
+<title>🔒 Privacy Beleid – Spirituele Website Julia</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #f5f0f8, #e0d7f1);
+    color: #4b3b6c;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    background-color: #000;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+/* MENU */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: #4b3b6c;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+}
+
+.dropbtn:hover {
+    background-color: #6e5ca0;
+    transform: scale(1.02);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #1c1c1c;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.4);
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dropdown-content a {
+    color: #fff;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background-color: #4b3b6c;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* MAIN CONTENT - duwt footer naar beneden */
+main {
+    flex: 1 0 auto;
+    max-width: 900px;
+    width: 90%;
+    margin: 30px auto;
+}
+
+/* SECTIONS */
+section {
+    padding: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(75, 59, 108, 0.1);
+    margin-bottom: 20px;
+    border: 1px solid rgba(224, 215, 241, 0.5);
+}
+
+/* PRIVACY SPECIFIEKE STIJLING */
+.privacy-header {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 2px solid #e0d7f1;
+    padding-bottom: 25px;
+}
+
+.privacy-header h1 {
+    font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 2.4em;
+    color: #4b3b6c;
+    margin: 0 0 10px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.05);
+}
+
+.privacy-date {
+    color: #888;
+    font-style: italic;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.privacy-section {
+    margin-bottom: 35px;
+    transition: all 0.3s ease;
+}
+
+.privacy-section:hover {
+    transform: translateX(5px);
+}
+
+.privacy-section h2 {
+    color: #4b3b6c;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e0d7f1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.privacy-section h3 {
+    color: #6e5ca0;
+    font-size: 1.2em;
+    margin: 25px 0 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.privacy-section p {
+    font-size: 1em;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.privacy-section ul, .privacy-section ol {
+    margin-bottom: 20px;
+    padding-left: 30px;
+}
+
+.privacy-section li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.privacy-section li strong {
+    color: #4b3b6c;
+}
+
+/* CONTACT INFO */
+.contact-info {
+    background: linear-gradient(135deg, #f5f0f8 0%, #e8dff0 100%);
+    padding: 25px;
+    border-radius: 12px;
+    margin: 25px 0;
+    border-left: 4px solid #4b3b6c;
+}
+
+.contact-info p {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-info a {
+    color: #4b3b6c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+/* BUTTON */
+.button {
+    display: inline-block;
+    background: linear-gradient(135deg, #4b3b6c 0%, #6e5ca0 100%);
+    color: white;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(75, 59, 108, 0.3);
+}
+
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(75, 59, 108, 0.4);
+}
+
+/* TABS VOOR VERSCHILLENDE TALEN */
+.language-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.lang-tab {
+    background: #e0d7f1;
+    color: #4b3b6c;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lang-tab:hover {
+    background: #d0c0e8;
+    transform: scale(1.05);
+}
+
+.lang-tab.active {
+    background: #4b3b6c;
+    color: white;
+    box-shadow: 0 4px 10px rgba(75, 59, 108, 0.3);
+}
+
+.lang-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.lang-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* FOOTER - altijd onderaan */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #eee 0%, #e0d7f1 100%);
+    font-size: 14px;
+    flex-shrink: 0;
+    width: 100%;
+    border-top: 2px solid #d4c5e0;
+}
+
+footer a {
+    color: #4b3b6c;
+    text-decoration: none;
+    margin: 0 8px;
+    transition: all 0.3s ease;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+
+footer a:hover {
+    color: #6e5ca0;
+    background: rgba(255,255,255,0.5);
+    transform: translateY(-2px);
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+    main {
+        width: 95%;
+        margin: 15px auto;
+    }
+    
+    section {
+        padding: 25px;
+    }
+    
+    .privacy-header h1 {
+        font-size: 1.8em;
+    }
+    
+    .privacy-section h2 {
+        font-size: 1.3em;
+    }
+    
+    .language-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .lang-tab {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .contact-info p {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+
+/* PRINT STIJL */
+@media print {
+    header, footer, .button, .language-tabs, .dropdown {
+        display: none;
+    }
+    
+    body {
+        background: white;
+    }
+    
+    section {
+        box-shadow: none;
+        padding: 0;
+        border: none;
+    }
+    
+    .privacy-section {
+        page-break-inside: avoid;
+    }
+    
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}
+
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f5f0f8;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b3b6c;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6e5ca0;
+}
+
+/* EXTRA ANIMATIES */
+.privacy-section:target {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% { background: rgba(224, 215, 241, 0.3); }
+    100% { background: transparent; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="dropdown">
+        <button class="dropbtn">📖 Menu</button>
+        <div class="dropdown-content">
+            <a href="./index.html">🏠 Startpagina</a>
+            <a href="./daghoroscoop.html">✨ Daghoroscoop</a>
+            <a href="./complimenten.html">💝 Complimenten</a>
+            <a href="./orakel.html">🔮 Orakel</a>
+            <a href="./shop.html">🛒 Winkel</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section>
+        <!-- Taal tabs -->
+        <div class="language-tabs">
+            <button class="lang-tab active" onclick="switchLanguage('nl', this)">🇳🇱 Nederlands</button>
+            <button class="lang-tab" onclick="switchLanguage('en', this)">🇬🇧 English</button>
+        </div>
+
+        <!-- Nederlandse versie -->
+        <div id="content-nl" class="lang-content active">
+            <div class="privacy-header">
+                <h1>🔒 Privacy Beleid</h1>
+                <div class="privacy-date">
+                    <span>📅 Laatst bijgewerkt: 7 maart 2026</span>
+                </div>
+            </div>
+
+            <div class="privacy-section" id="section1">
+                <h2>📋 1. Wie zijn wij?</h2>
+                <p>Julia's Spirituele Website is een online platform gewijd aan spirituele groei, dagelijkse inspiratie en bewustwording. Wij nemen uw privacy serieus en verwerken uw persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).</p>
+                
+                <div class="contact-info">
+                    <p><strong>📧 Contactgegevens:</strong></p>
+                    <p>✉️ E-mail: <a href="mailto:info@julia-spiritueel.nl">info@julia-spiritueel.nl</a></p>
+                    <p>🌐 Website: <a href="./index.html">www.julia-spiritueel.nl</a></p>
+                    <p>🏢 KvK-nummer: 12345678</p>
+                </div>
+            </div>
+
+            <div class="privacy-section" id="section2">
+                <h2>📊 2. Welke gegevens verzamelen wij?</h2>
+                <p>Afhankelijk van hoe u onze website gebruikt, kunnen wij de volgende gegevens verzamelen:</p>
+                
+                <h3>📈 Automatisch verzamelde gegevens:</h3>
+                <ul>
+                    <li><strong>IP-adres:</strong> Voor beveiliging en analyse</li>
+                    <li><strong>Browsertype en -versie:</strong> Om de website optimaal weer te geven</li>
+                    <li><strong>Bezoekgedrag:</strong> Welke pagina's u bezoekt en hoe lang</li>
+                    <li><strong>Cookies:</strong> Voor functionele en analytische doeleinden</li>
+                </ul>
+                
+                <h3>✍️ Door u verstrekte gegevens:</h3>
+                <ul>
+                    <li><strong>Naam en e-mailadres:</strong> Als u contact met ons opneemt</li>
+                    <li><strong>Bestelinformatie:</strong> Bij aankopen in onze webwinkel</li>
+                    <li><strong>Geboortedatum:</strong> Voor gepersonaliseerde horoscopen (optioneel)</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section" id="section3">
+                <h2>🎯 3. Doeleinden van gegevensverwerking</h2>
+                <p>Wij verwerken uw gegevens voor de volgende doeleinden:</p>
+                <ol>
+                    <li><strong>🔧 Technisch beheer:</strong> Verbeteren van de website-ervaring</li>
+                    <li><strong>📬 Communicatie:</strong> Beantwoorden van vragen en verzoeken</li>
+                    <li><strong>📦 Orderafhandeling:</strong> Verwerken van bestellingen via WhatsApp</li>
+                    <li><strong>📈 Analyse:</strong> Begrijpen hoe bezoekers onze website gebruiken</li>
+                    <li><strong>⚖️ Wettelijke verplichtingen:</strong> Bijvoorbeeld belastingadministratie</li>
+                </ol>
+            </div>
+
+            <div class="privacy-section" id="section4">
+                <h2>🍪 4. Cookies</h2>
+                <p>Onze website gebruikt alleen functionele cookies. Deze zijn nodig voor:</p>
+                <ul>
+                    <li>Het onthouden van uw winkelwagen</li>
+                    <li>Het bijhouden van uw taalkeuze</li>
+                    <li>Basis website functionaliteit</li>
+                </ul>
+                <p>Wij gebruiken <strong>geen</strong> tracking cookies van derden zoals Google Analytics.</p>
+            </div>
+
+            <div class="privacy-section" id="section5">
+                <h2>🛡️ 5. Beveiliging</h2>
+                <p>Wij nemen passende beveiligingsmaatregelen om misbruik en ongeautoriseerde toegang te voorkomen:</p>
+                <ul>
+                    <li>🔐 SSL/HTTPS encryptie</li>
+                    <li>🛡️ Regelmatige updates en beveiligingspatches</li>
+                    <li>👥 Beperkte toegang tot persoonsgegevens</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section" id="section6">
+                <h2>⚖️ 6. Uw rechten</h2>
+                <p>Onder de AVG heeft u de volgende rechten:</p>
+                <ul>
+                    <li><strong>🔍 Inzage:</strong> Recht om uw gegevens in te zien</li>
+                    <li><strong>✏️ Correctie:</strong> Recht op aanpassing van onjuiste gegevens</li>
+                    <li><strong>🗑️ Verwijdering:</strong> Recht om vergeten te worden</li>
+                    <li><strong>⏸️ Beperking:</strong> Recht op beperking van verwerking</li>
+                    <li><strong>📤 Dataportabiliteit:</strong> Recht op overdracht van gegevens</li>
+                    <li><strong>🚫 Bezwaar:</strong> Recht om bezwaar te maken</li>
+                </ul>
+                <p>Neem contact met ons op via <a href="mailto:info@julia-spiritueel.nl">info@julia-spiritueel.nl</a> om deze rechten uit te oefenen.</p>
+            </div>
+
+            <div class="privacy-section" id="section7">
+                <h2>⏳ 7. Bewaartermijnen</h2>
+                <p>Wij bewaren uw gegevens niet langer dan noodzakelijk:</p>
+                <ul>
+                    <li><strong>Contactformulieren:</strong> Maximaal 1 jaar</li>
+                    <li><strong>Bestellingen:</strong> 7 jaar (wettelijke bewaarplicht)</li>
+                    <li><strong>Analytische gegevens:</strong> 26 maanden</li>
+                </ul>
+            </div>
+
+            <div class="privacy-section" id="section8">
+                <h2>🤝 8. Delen met derden</h2>
+                <p>Wij delen uw gegevens <strong>niet</strong> met derden, behalve:</p>
+                <ul>
+                    <li>Als wij wettelijk verplicht zijn (bijvoorbeeld politie/justitie)</li>
+                    <li>Met uw uitdrukkelijke toestemming</li>
+                </ul>
+                <p>Voor betalingen gebruiken wij <strong>geen</strong> betaaldienst - bestellingen worden afgehandeld via WhatsApp en contant bij afhaal.</p>
+            </div>
+
+            <div class="privacy-section" id="section9">
+                <h2>📝 9. Wijzigingen in dit beleid</h2>
+                <p>Wij behouden ons het recht voor om dit privacybeleid aan te passen. Wijzigingen worden op deze pagina gepubliceerd. De datum bovenaan geeft aan wanneer het beleid voor het laatst is bijgewerkt.</p>
+            </div>
+
+            <div class="privacy-section" id="section10">
+                <h2>📞 10. Klachten</h2>
+                <p>Heeft u een klacht over hoe wij met uw gegevens omgaan? Neem dan eerst contact met ons op. Komt u er niet uit, dan kunt u een klacht indienen bij de <strong>Autoriteit Persoonsgegevens</strong>.</p>
+                <p>📌 <a href="https://autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener noreferrer">www.autoriteitpersoonsgegevens.nl</a></p>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="./index.html" class="button">← Terug naar startpagina</a>
+            </div>
+        </div>
+
+        <!-- Engelse versie -->
+        <div id="content-en" class="lang-content">
+            <div class="privacy-header">
+                <h1>🔒 Privacy Policy</h1>
+                <div class="privacy-date">
+                    <span>📅 Last updated: March 7, 2026</span>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2>📋 1. Who we are</h2>
+                <p>Julia's Spiritual Website is an online platform dedicated to spiritual growth, daily inspiration and awareness. We take your privacy seriously and process your personal data in accordance with the General Data Protection Regulation (GDPR).</p>
+                
+                <div class="contact-info">
+                    <p><strong>📧 Contact:</strong></p>
+                    <p>✉️ Email: <a href="mailto:info@julia-spiritueel.nl">info@julia-spiritueel.nl</a></p>
+                    <p>🌐 Website: <a href="./index.html">www.julia-spiritueel.nl</a></p>
+                </div>
+            </div>
+
+            <div class="privacy-section">
+                <h2>📊 2. What data we collect</h2>
+                <p>Depending on how you use our website, we may collect:</p>
+                <ul>
+                    <li><strong>IP address:</strong> For security and analysis</li>
+                    <li><strong>Browser type:</strong> To optimize display</li>
+                    <li><strong>Behavior data:</strong> Which pages you visit</li>
+                    <li><strong>Cookies:</strong> For functionality</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="./index.html" class="button">← Back to homepage</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    © 2026 - Mijn Spirituele Website Julia (4-Eyes)<br> 
+    <a href="./privacy.html">🔒 Privacy beleid</a> | 
+    <a href="./voorwaarden.html">📜 Algemene Voorwaarden</a> | 
+    <a href="https://github.com/" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
+</footer>
+
+<script>
+// Taal switcher functie
+function switchLanguage(lang, element) {
+    // Verberg alle content
+    document.querySelectorAll('.lang-content').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    // Toon geselecteerde taal
+    document.getElementById(`content-${lang}`).classList.add('active');
+    
+    // Update active tab
+    document.querySelectorAll('.lang-tab').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    element.classList.add('active');
+    
+    // Sla voorkeur op in localStorage
+    localStorage.setItem('preferred-language', lang);
+    
+    // Update URL hash (optioneel)
+    window.location.hash = lang;
+}
+
+// Laad opgeslagen taalvoorkeur
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLang = localStorage.getItem('preferred-language');
+    const hashLang = window.location.hash.substring(1);
+    
+    // Prioriteit: hash > saved > default (nl)
+    if (hashLang && (hashLang === 'nl' || hashLang === 'en')) {
+        const tab = document.querySelector(`[onclick*="'${hashLang}'"]`);
+        if (tab) switchLanguage(hashLang, tab);
+    } else if (savedLang && savedLang !== 'nl') {
+        const tab = document.querySelector(`[onclick*="'${savedLang}'"]`);
+        if (tab) switchLanguage(savedLang, tab);
+    }
+    
+    // Scroll naar sectie als er een hash is (bijv. #section1)
+    if (window.location.hash.includes('section')) {
+        setTimeout(() => {
+            document.querySelector(window.location.hash)?.scrollIntoView({
+                behavior: 'smooth'
+            });
+        }, 100);
+    }
+});
+
+// Smooth scroll voor interne links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href'))?.scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+</script>
+
+</body>
+</html>

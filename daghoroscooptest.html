@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daghoroscoop – Spirituele Website Julia</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, sans-serif;
+background:linear-gradient(to bottom,#f5f0f8,#e0d7f1);
+color:#4b3b6c;
+}
+
+header{
+text-align:center;
+background:#000;
+padding:20px;
+position:sticky;
+top:0;
+}
+
+.dropbtn{
+background:#4b3b6c;
+color:white;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.dropdown{
+position:relative;
+display:inline-block;
+}
+
+.dropdown-content{
+display:none;
+position:absolute;
+background:#1c1c1c;
+border-radius:8px;
+min-width:160px;
+}
+
+.dropdown-content a{
+color:white;
+padding:12px;
+display:block;
+text-decoration:none;
+}
+
+.dropdown-content a:hover{
+background:#4b3b6c;
+}
+
+.dropdown:hover .dropdown-content{
+display:block;
+}
+
+section{
+max-width:800px;
+margin:20px auto;
+padding:20px;
+background:white;
+border-radius:10px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+#horoscoop img{
+width:100%;
+max-width:600px;
+display:block;
+margin:auto;
+border-radius:8px;
+}
+
+footer{
+text-align:center;
+padding:20px;
+margin-top:50px;
+background:#eee;
+}
+
+#myHeader {
+  font-family:Arial, sans-serif;
+  text-align: center;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="dropdown">
+<button class="dropbtn">Menu</button>
+
+<div class="dropdown-content">
+<a href="./index.html">Startpagina</a>
+<a href="./berichten.html">Berichten</a>
+<a href="./complimenten.html">Complimenten</a>
+<a href="./orakel.html">Orakel</a>
+<a href="./shop.html">Winkel</a>
+</div>
+
+</div>
+</header>
+
+<section>
+<h1 id="myHeader">Daghoroscoop Gegenereerd</h1>
+
+<br>
+<a href="./index.html">Startpagina</a>
+</section>
+
+<section id="horoscoop">
+
+<img src="./serene.jpg" alt="Spirituele afbeelding">
+<br>
+<p>Geplaatst: <span id="datum"></span></p>
+
+<div id="horoscooptekst"></div>
+
+</section>
+
+<footer>
+© 2026 - Mijn Spirituele Website Julia
+</footer>
+
+<script>
+
+/* Datum automatisch tonen */
+
+const today = new Date();
+document.getElementById("datum").innerText =
+today.getDate()+"-"+(today.getMonth()+1)+"-"+today.getFullYear();
+
+
+/* Horoscoop database */
+
+const sterrenbeelden = {
+
+Ram:[
+"Vandaag voel je extra motivatie om dingen af te ronden.",
+"Je energie helpt je vooruit. Gebruik dit om plannen te starten.",
+"Een gesprek kan vandaag onverwachte duidelijkheid brengen."
+],
+
+Stier:[
+"Geduld helpt je vandaag verder dan snelheid.",
+"Een kleine stap kan vandaag grote vooruitgang betekenen.",
+"Praktische keuzes brengen rust in je dag."
+],
+
+Tweelingen:[
+"Nieuwe ideeën komen vandaag snel naar je toe.",
+"Communicatie speelt een belangrijke rol vandaag.",
+"Een spontaan gesprek kan inspiratie geven."
+],
+
+Kreeft:[
+"Je intuïtie wijst je vandaag de juiste richting.",
+"Rust nemen helpt je om helder te blijven denken.",
+"Een vertrouwd gevoel geeft vandaag veiligheid."
+],
+
+Leeuw:[
+"Je zelfvertrouwen inspireert vandaag anderen.",
+"Initiatief nemen kan verrassend goed uitpakken.",
+"Een warm gebaar kan veel betekenen."
+],
+
+Maagd:[
+"Georganiseerd werken helpt je veel te bereiken.",
+"Kleine taken afronden geeft voldoening.",
+"Neem ook even tijd voor jezelf vandaag."
+],
+
+Weegschaal:[
+"Samenwerking verloopt vandaag soepel.",
+"Luisteren naar anderen brengt nieuwe inzichten.",
+"Een spontaan moment zorgt voor gezelligheid."
+],
+
+Schorpioen:[
+"Je instinct helpt je bij belangrijke keuzes.",
+"Een eerlijk gesprek kan spanning oplossen.",
+"Vandaag voel je een sterke drang vooruit te gaan."
+],
+
+Boogschutter:[
+"Inspiratie komt uit onverwachte hoek.",
+"Vandaag is goed voor plannen voor de toekomst.",
+"Blijf openstaan voor nieuwe ideeën."
+],
+
+Steenbok:[
+"Discipline helpt je dichter bij je doelen.",
+"Rustig werken brengt vandaag succes.",
+"Duidelijkheid geeft rust in relaties."
+],
+
+Waterman:[
+"Creatieve ideeën komen vandaag vanzelf.",
+"Nieuwe oplossingen dienen zich aan.",
+"Neem tijd om even te ontspannen."
+],
+
+Vissen:[
+"Je intuïtie en verbeelding zijn sterk vandaag.",
+"Creatieve plannen kunnen vorm krijgen.",
+"Een klein gebaar kan warmte brengen."
+]
+
+};
+
+
+/* Dagnummer gebruiken als random seed */
+
+const dag = Math.floor(today.getTime() / (1000*60*60*24));
+
+let output = "";
+
+for(const teken in sterrenbeelden){
+
+const lijst = sterrenbeelden[teken];
+
+const index = dag % lijst.length;
+
+const tekst = lijst[index];
+
+const symbolen={
+Ram:"♈",
+Stier:"♉",
+Tweelingen:"♊",
+Kreeft:"♋",
+Leeuw:"♌",
+Maagd:"♍",
+Weegschaal:"♎",
+Schorpioen:"♏",
+Boogschutter:"♐",
+Steenbok:"♑",
+Waterman:"♒",
+Vissen:"♓"
+};
+
+output += "<p><strong>"+symbolen[teken]+" "+teken+"</strong> – "+tekst+"</p>";
+
+}
+
+document.getElementById("horoscooptekst").innerHTML = output;
+
+</script>
+
+</body>
+</html>

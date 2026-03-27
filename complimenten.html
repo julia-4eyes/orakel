@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Complimenten – Spirituele Website Julia</title>
+
+    <!-- Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            text-align: center;
+            padding: 10px;
+            color: white;
+        }
+	h1 { margin-top: 10px; }
+
+
+        button {
+            background-color: #ffcc00;
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .terug-knop {
+            background-color: #ffcc00;
+            color: black;
+            border: none;
+            padding: 5px 10px;
+            font-size: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin: 10px;
+        }
+
+        table {
+            margin: 40px auto;
+            width: 70%;
+        }
+
+        td {
+            padding: 40px;
+            font-size: 32px;
+            font-weight: bold;
+            background-color: #8000ff;
+            color: #333;
+	    border-radius:10px;
+	    border:2px solid white;
+        }
+
+/* sterren */
+
+#stars{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:-1;
+}
+
+.star{
+position:absolute;
+width:3px;
+height:3px;
+background:white;
+border-radius:50%;
+opacity:0.8;
+animation:twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle{
+0%{opacity:0.2; transform:scale(0.8);}
+50%{opacity:1; transform:scale(1.5);}
+100%{opacity:0.2; transform:scale(0.8);}
+}
+
+
+
+
+    </style>
+
+    <!-- Audio -->
+    <audio id="drumroll" src="./drumroll.mp3"></audio>
+    <audio id="backgroundMusic" src="./native.mp3" loop></audio>
+    <audio id="ping" src="./end.mp3"></audio>
+
+</head>
+<body>
+<div id="stars"></div>
+    <h1>🌟 Complimenten Generator 🌟</h1>
+
+    <button onclick="startCompliment()">Klik voor een Compliment</button>
+
+    <table>
+        <tr>
+            <td id="compliment">Klik op de knop hierboven voor een compliment 💖</td>
+        </tr>
+    </table>
+
+    <!-- Terug knop -->
+    <button class="terug-knop" onclick="gaTerug()">Startpagina</button>
+
+<script>
+const complimenten = [
+    "Je bent geweldig!",
+    "Je hebt een prachtige glimlach.",
+    "Je bent slimmer dan je denkt.",
+    "Je maakt de wereld mooier.",
+    "Je bent een inspiratie.",
+    "Je hebt een goed hart.",
+    "Je bent uniek.",
+    "Je hebt een geweldige energie.",
+    "Je straalt positiviteit uit.",
+    "Je bent ontzettend creatief.",
+    "Je bent sterk.",
+    "Je bent betrouwbaar.",
+    "Je bent zorgzaam.",
+    "Je bent moedig.",
+    "Je bent bijzonder.",
+    "Je maakt anderen blij.",
+    "Je bent fantastisch.",
+    "Je bent briljant.",
+    "Je hebt een mooie uitstraling.",
+    "Je bent waardevol.",
+    "Je bent belangrijk.",
+    "Je bent getalenteerd.",
+    "Je bent slim.",
+    "Je bent grappig.",
+    "Je hebt een goed gevoel voor humor.",
+    "Je bent attent.",
+    "Je bent behulpzaam.",
+    "Je bent energiek.",
+    "Je bent charmant.",
+    "Je bent eerlijk.",
+    "Je bent loyaal.",
+    "Je bent spontaan.",
+    "Je bent positief.",
+    "Je bent vol doorzettingsvermogen.",
+    "Je bent liefdevol.",
+    "Je bent een doorzetter.",
+    "Je bent stijlvol.",
+    "Je bent vriendelijk.",
+    "Je bent origineel.",
+    "Je bent zelfverzekerd.",
+    "Je bent inspirerend.",
+    "Je bent indrukwekkend.",
+    "Je bent knap.",
+    "Je bent prachtig.",
+    "Je bent geweldig gezelschap.",
+    "Je bent een goede luisteraar.",
+    "Je bent respectvol.",
+    "Je bent geduldig.",
+    "Je bent ambitieus.",
+    "Je bent wijs.",
+    "Je bent warm.",
+    "Je bent kalm.",
+    "Je bent krachtig.",
+    "Je bent authentiek.",
+    "Je bent puur.",
+    "Je bent eerlijk en oprecht.",
+    "Je bent een voorbeeld voor anderen.",
+    "Je hebt een groot hart.",
+    "Je bent hartstikke leuk.",
+    "Je bent fantastisch zoals je bent.",
+    "Je bent bewonderenswaardig.",
+    "Je bent gevoelig op een mooie manier.",
+    "Je bent slim en sterk.",
+    "Je bent een lichtpuntje.",
+    "Je bent magisch.",
+    "Je bent sprankelend.",
+    "Je bent een topper.",
+    "Je bent geweldig om mee te praten.",
+    "Je hebt een mooie lach.",
+    "Je bent super lief.",
+    "Je bent cool.",
+    "Je bent bijzonder op jouw manier.",
+    "Je bent uniek en speciaal.",
+    "Je bent een ster.",
+    "Je bent geweldig om bij te zijn.",
+    "Je bent creatief en slim.",
+    "Je bent een echte doorzetter.",
+    "Je bent betrouwbaar en sterk.",
+    "Je bent een zonnetje.",
+    "Je bent krachtig en mooi.",
+    "Je bent puur en oprecht.",
+    "Je bent positief ingesteld.",
+    "Je bent fantastisch om te kennen.",
+    "Je bent een mooi mens.",
+    "Je bent grappig en slim.",
+    "Je bent energiek en vrolijk.",
+    "Je bent geweldig zoals je bent.",
+    "Je bent bijzonder waardevol.",
+    "Je bent een inspiratiebron.",
+    "Je bent charmant en vriendelijk.",
+    "Je bent uniek en krachtig.",
+    "Je bent prachtig van binnen en buiten.",
+    "Je bent geweldig in wat je doet.",
+    "Je bent een fantastisch persoon.",
+    "Je bent gewoon geweldig!",
+    "Je maakt alles beter.",
+    "Je bent een echte held."
+];
+
+let muziekGestart = false;
+
+function startCompliment() {
+    const drum = document.getElementById("drumroll");
+    const complimentVak = document.getElementById("compliment");
+    const bgMusic = document.getElementById("backgroundMusic");
+    const ping = document.getElementById("ping");
+    const knop = document.querySelector("button");
+
+    complimentVak.innerText = "🥁 Even spannend...";
+    knop.disabled = true;
+
+    if (!muziekGestart) {
+        bgMusic.volume = 0.2;
+        bgMusic.play();
+        muziekGestart = true;
+    }
+
+    drum.pause();
+    drum.currentTime = 0;
+    drum.play();
+
+    setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * complimenten.length);
+        complimentVak.innerText = complimenten[randomIndex];
+
+        ping.pause();
+        ping.currentTime = 0;
+        ping.play();
+
+        confetti({
+            particleCount: 200,
+            spread: 120,
+            origin: { y: 0.6 }
+        });
+
+        knop.disabled = false;
+
+    }, 2000);
+}
+
+/* sterren */
+
+function createStars(){
+
+const starsContainer=document.getElementById("stars");
+starsContainer.innerHTML="";
+
+for(let i=0;i<120;i++){
+
+const star=document.createElement("div");
+star.classList.add("star");
+
+star.style.top=Math.random()*window.innerHeight+"px";
+star.style.left=Math.random()*window.innerWidth+"px";
+star.style.animationDuration=(2+Math.random()*4)+"s";
+
+starsContainer.appendChild(star);
+
+}
+
+}
+
+createStars();
+
+window.addEventListener("resize", () => {
+createFan();
+});
+
+function gaTerug() {
+    window.location.href = "index.html";
+}
+</script>
+<br><br>
+<footer>
+© 2026 - Mijn Spirituele Website Julia (4-Eyes)<br> 
+<a href="./privacy.html">Privacy beleid</a> | 
+<a href="./voorwaarden.html">Algemene Voorwaarden</a> | 
+<a href="https://github.com/">GitHub</a><br>
+</footer>
+</body>
+</html>

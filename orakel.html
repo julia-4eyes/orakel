@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Orakel – Spirituele Website Julia</title>
+
+<style>
+
+body{
+margin:0;
+background: radial-gradient(circle at top, #000, #0c061a);
+font-family: Arial, sans-serif;
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* sterren */
+
+#stars{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:-1;
+}
+
+.star{
+position:absolute;
+width:3px;
+height:3px;
+background:white;
+border-radius:50%;
+opacity:0.8;
+animation:twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle{
+0%{opacity:0.2; transform:scale(0.8);}
+50%{opacity:1; transform:scale(1.5);}
+100%{opacity:0.2; transform:scale(0.8);}
+}
+
+h1{
+margin-top:10px;
+}
+
+/* kaarten */
+
+
+#deck{
+position:relative;
+width:100%;
+max-width:900px;
+margin:20px auto;
+height:340px;
+display:flex;
+justify-content:center;
+}
+
+.card{
+position:absolute;
+width:90px;
+height:150px;
+transform-origin:bottom center;
+transition:transform .8s ease;
+cursor:pointer;
+}
+
+.card img{
+width:100%;
+height:100%;
+border-radius:8px;
+box-shadow:0 6px 15px rgba(0,0,0,0.6);
+}
+
+.card:hover{
+transform:scale(1.1);
+z-index:10;
+}
+
+/* knoppen */
+
+button{
+margin-top:5px;
+margin-left:8px;
+padding:6px 20px;
+font-size:16px;
+border-radius:8px;
+border:none;
+background:gold;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* muziek knop */
+
+#butback{
+padding:6px 15px;
+background:gold;
+border-radius:8px;
+border:none;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* overlay */
+
+#overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+backdrop-filter:blur(4px);
+display:none;
+flex-direction:column;
+justify-content:flex-start;
+align-items:center;
+padding:20px;
+overflow-y:auto;
+}
+
+#readingContainer{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+justify-content:center;
+align-items:flex-start;
+max-width:1000px;
+}
+
+.readingCard{
+text-align:center;
+max-width:220px;
+}
+
+.readingCard img{
+width:180px;
+border-radius:12px;
+margin-bottom:10px;
+animation:flipCard .6s ease;
+}
+
+@keyframes flipCard{
+from{transform:rotateY(90deg); opacity:0;}
+to{transform:rotateY(0deg); opacity:1;}
+}
+
+.button-row{
+display:flex;
+justify-content:center;
+gap:10px;
+margin-top:10px;
+flex-wrap:wrap;
+}
+
+/* shuffle animatie */
+
+@keyframes shuffleMove{
+0%{transform:translateY(-150px) rotate(0deg);}
+25%{transform:translateY(-80px) rotate(20deg);}
+50%{transform:translateY(-120px) rotate(-20deg);}
+75%{transform:translateY(-60px) rotate(10deg);}
+100%{transform:translateY(-150px) rotate(0deg);}
+}
+
+.shuffle{
+animation:shuffleMove .6s ease-in-out;
+}
+
+/* kaart achterkant */
+
+.card-back{
+width:100%;
+height:100%;
+background-color:#8000ff;
+border:2px solid white;
+border-radius:8px;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+font-weight:bold;
+}
+
+/* close knop */
+
+.close-btn{
+margin-top:30px;
+padding:10px 20px;
+background:crimson;
+border-radius:8px;
+border:none;
+color:white;
+}
+
+/* tekst sectie */
+
+section{
+max-width:450px;
+width:75%;
+margin:20px auto;
+padding:20px;
+color:white;
+text-align:left;
+background:#8000ff;
+border-radius:10px;
+border:2px solid white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<audio id="backgroundMusic" loop>
+<source src="./native.mp3" type="audio/mpeg">
+</audio>
+
+<h1>🔮 Julia's (4-Eyes) Orakel 🔮</h1>
+
+<button onclick="goBack()">Startpagina</button>
+<button id="butback" onclick="toggleMusic()">🔇 Muziek aan</button>
+
+<div id="deck"></div>
+
+<div class="button-row">
+<button onclick="shuffleDeck()">Schud de kaarten</button>
+<button onclick="drawThreeCards()">Trek 3 kaarten</button>
+</div>
+<br>
+<section>
+
+<p>
+<strong>Voor je de kaart trekt</strong><br>
+Sluit je ogen. Adem langzaam in door je neus…
+en adem rustig uit door je mond.
+</p>
+
+<p>
+<strong>
+Wat mag ik vandaag zien?<br>
+Welke energie begeleidt mij vandaag?<br>
+Wat wil mijn ziel mij laten begrijpen?
+</strong>
+</p>
+
+<p>
+<strong>Schud de kaarten</strong>, klik op een kaart om één kaart te trekken. Of de knop Trek drie kaarten voor de kaarten van:<strong><br><br>- Verleden<br>- Heden<br>- Toekomst</strong>
+</p>
+
+<p style="margin-top:30px; font-style:italic;">
+Liefs Julia (4-Eyes) ✨
+</p>
+
+</section>
+
+<footer><br>
+© 2026 - Mijn Spirituele Website Julia (4-Eyes)<br> 
+<a href="./privacy.html">Privacy beleid</a> | 
+<a href="./voorwaarden.html">Algemene Voorwaarden</a> | 
+<a href="https://github.com/">GitHub</a><br><br>
+</footer>
+
+<div id="overlay">
+<div id="readingContainer"></div>
+<button class="close-btn" onclick="closeOverlay()">Sluiten</button>
+</div>
+
+
+<script>
+
+const deck = document.getElementById("deck");
+const overlay = document.getElementById("overlay");
+const container = document.getElementById("readingContainer");
+
+let musicStarted=false;
+
+
+/* muziek */
+
+function toggleMusic(){
+
+const music=document.getElementById("backgroundMusic");
+const btn=document.getElementById("butback");
+
+music.volume=0.1;
+
+if(music.paused){
+
+music.play();
+btn.textContent="🔊 Muziek uit";
+
+}else{
+
+music.pause();
+btn.textContent="🔇 Muziek aan";
+
+}
+
+}
+
+
+document.addEventListener("click", startMusicOnce);
+
+function startMusicOnce(){
+
+const music=document.getElementById("backgroundMusic");
+
+music.volume=0.1;
+music.play().catch(()=>{});
+
+document.removeEventListener("click", startMusicOnce);
+
+}
+
+
+
+overlay.addEventListener("click",e=>{
+if(e.target===overlay){
+closeOverlay();
+}
+});
+
+
+/* sterren */
+
+function createStars(){
+
+const starsContainer=document.getElementById("stars");
+starsContainer.innerHTML="";
+
+for(let i=0;i<120;i++){
+
+const star=document.createElement("div");
+star.classList.add("star");
+
+star.style.top=Math.random()*window.innerHeight+"px";
+star.style.left=Math.random()*window.innerWidth+"px";
+star.style.animationDuration=(2+Math.random()*4)+"s";
+
+starsContainer.appendChild(star);
+
+}
+
+}
+
+createStars();
+
+window.addEventListener("resize", () => {
+createFan();
+});
+
+/* kaarten */
+
+
+let tarotData = [
+{ name:"Ontvouwen", img:"./2026-00.jpg", up:"Ontvouw je innerlijke wijsheid. Erken je intuitie en laat je ziel je gids zijn.", rev:"Je bent misschien te veel naar buiten aan het luisteren en te weinig naar je eigen innerlijke stem. Twijfel, ruis of oude overtuigingen kunnen je intuitie tijdelijk vertroebelen." },
+{ name:"Ware Energie", img:"./2026-01.jpg", up:"Zoals een levenskracht die zich ontvouwt, mag ook jij groeien in je eigen vorm. Laat je energie stromen en vertrouw op de richting van je ziel.", rev:"Je energie wil stromen, maar iets houdt haar tegen. Laat controle en twijfel los en vertrouw weer op de natuurlijke richting van je ziel." },
+{ name:"Nieuwe Mogelijkheden", img:"./2026-02.jpg", up:"Durf de deur te openen, zelfs als je nog niet weet wat er aan de andere kant ligt. Vaak wachten daar precies de ervaringen die je ziel nodig heeft om verder te groeien.", rev:"De weg vooruit is niet gesloten, maar je blik kan momenteel naar achteren gericht zijn. Wanneer je oude zorgen of verwachtingen loslaat, zul je merken dat de deur naar groei nog steeds openstaat en misschien al een tijdje op je wacht." },
+{ name:"Innerlijke Sterren", img:"./2026-03.jpg", up:"Vertrouw op wat zich in stilte ontvouwt. Zelfs in het donker ontstaan nieuwe sterren.", rev:"Angst voor het onbekende houdt je blik naar beneden. Sta jezelf toe weer omhoog te kijken, de sterren zijn nooit verdwenen." },
+{ name:"Kosmische Beweging", img:"./2026-04.jpg", up:"In het donker ontstaan nieuwe bewegingen. Niet alles hoeft zichtbaar te zijn om te groeien. Volg de zachte stroom van je intuïtie het licht in jou kent de weg.", rev:"Wanneer stilte verwarring brengt, keer terug naar je innerlijk licht. Daar begint de weg opnieuw." },
+{ name:"Verlichting", img:"./2026-05.jpg", up:"Er komt een moment waarop alles helderder wordt. Wat eerst verborgen leek, begint zich nu te tonen. Laat het licht van bewustzijn zacht door je gedachten en gevoelens stromen. In dat licht zie je niet alleen de waarheid om je heen, maar ook de wijsheid die altijd al in jou aanwezig was.", rev:"Soms kan te veel zoeken naar antwoorden juist mist creëren. Misschien probeer je alles te begrijpen met je hoofd, terwijl het inzicht al in je hart leeft. Sta jezelf toe om even stil te worden. Wanneer je de druk om te begrijpen loslaat, kan het licht van inzicht vanzelf weer verschijnen." },
+{ name:"Het Onbekende", img:"./2026-06.jpg", up:"Je beweegt door onbekend terrein, maar je innerlijk kompas weet de weg. Vertrouw op je intuïtie en volg de richting die energie en nieuwsgierigheid brengt. Niet alles hoeft nu duidelijk te zijn, het pad ontvouwt zich terwijl jij beweegt.", rev:"Twijfel of controle kan je van je innerlijke richting afbrengen. Neem een stap terug en luister opnieuw naar je intuïtie. De weg wordt zichtbaar wanneer je het los laat." },
+{ name:"Oerzaad", img:"./2026-07.jpg", up:"Leven stroomt door je heen. Groei ontstaat wanneer je jezelf toestaat te bewegen, te veranderen en te voelen. Wat in beweging komt, vindt zijn eigen vorm.", rev:"Je houdt iets vast dat eigenlijk wil veranderen. Laat controle los en geef ruimte aan groei. Wanneer je ontspant, kan de energie weer stromen." },
+{ name:"Verborgen Stroom", img:"./2026-08.jpg", up:"Onder de oppervlakte beweegt meer dan zichtbaar is. Vertrouw op de subtiele stroming die je leidt. Niet alles hoeft helder te zijn — het mysterie wijst de weg.", rev:"Je probeert te begrijpen wat nog niet onthuld wil worden. Laat het proces zich ontvouwen. In stilte en geduld wordt de richting vanzelf duidelijk." },
+{ name:"Onder de Lagen", img:"./2026-09.jpg", up:"Je bevindt je in een periode waarin intuïtie sterker wordt. Dingen die eerder verborgen waren, beginnen zich te tonen — soms subtiel, soms intens. De bewegingen in je leven lijken chaotisch, maar ze vormen samen een pad dat je dichter bij je essentie brengt.", rev:"Vertrouw op wat je voelt, zelfs als het moeilijk te verklaren is. Niet alles hoeft meteen duidelijk te zijn. Sommige waarheden ontvouwen zich langzaam, laag voor laag. Laat oude structuren los en kijk opnieuw. Wat eerst verwarring leek, kan nu inzicht worden." }
+];
+
+/* waaier */
+
+function createFan(){
+
+deck.innerHTML="";
+
+const spread = window.innerWidth < 600 ? 70 : 120;
+const center = deck.clientWidth / 2;
+
+tarotData.forEach((data,index)=>{
+
+const card=document.createElement("div");
+card.classList.add("card");
+
+const angle=-spread/2+(spread/(tarotData.length-1))*index;
+
+card.style.left = center - 45 + "px";
+card.style.bottom="0px";
+card.style.transform=`rotate(${angle}deg) translateY(-150px)`;
+
+const back=document.createElement("div");
+back.classList.add("card-back");
+back.textContent="Orakel";
+
+card.appendChild(back);
+card.onclick=()=>showSingleCard(data);
+
+deck.appendChild(card);
+
+});
+
+}
+
+/* shuffle */
+
+function shuffleDeck(){
+
+const cards=document.querySelectorAll(".card");
+
+cards.forEach((card,index)=>{
+
+setTimeout(()=>{card.classList.add("shuffle")},index*40);
+setTimeout(()=>{card.classList.remove("shuffle")},600+index*40);
+
+});
+
+tarotData.sort(()=>Math.random()-0.5);
+
+setTimeout(createFan,900);
+
+}
+
+/* confetti */
+
+function startConfetti(){
+
+const duration=3000;
+const end=Date.now()+duration;
+
+(function frame(){
+
+if(Date.now()>end) return;
+
+const confetti=document.createElement("div");
+
+confetti.style.position="fixed";
+confetti.style.width="8px";
+confetti.style.height="8px";
+confetti.style.background="pink";
+confetti.style.top="-10px";
+confetti.style.left=Math.random()*window.innerWidth+"px";
+
+document.body.appendChild(confetti);
+
+confetti.animate(
+[
+{transform:"translateY(0px)"},
+{transform:`translateY(${window.innerHeight}px)`}
+],
+{duration:2000}
+);
+
+setTimeout(()=>confetti.remove(),2000);
+
+requestAnimationFrame(frame);
+
+})();
+
+}
+
+/* kaart tonen */
+
+function showSingleCard(data){
+
+if(overlay.style.display==="flex") return;
+
+container.innerHTML="";
+
+const reversed=Math.random()>0.5;
+
+const cardDiv=document.createElement("div");
+cardDiv.classList.add("readingCard");
+
+const img=document.createElement("img");
+img.src=data.img;
+img.style.transform=reversed?"rotate(180deg)":"rotate(0deg)";
+
+const title=document.createElement("h3");
+title.textContent=data.name+(reversed?" (Omgekeerd)":"");
+
+const meaning=document.createElement("p");
+meaning.textContent=reversed?data.rev:data.up;
+
+cardDiv.appendChild(img);
+cardDiv.appendChild(title);
+cardDiv.appendChild(meaning);
+
+container.appendChild(cardDiv);
+
+overlay.style.display="flex";
+
+startConfetti();
+
+}
+
+/* 3 kaarten */
+
+function drawThreeCards(){
+
+container.innerHTML="";
+const positions=["Verleden","Heden","Toekomst"];
+
+let shuffled=[...tarotData].sort(()=>Math.random()-0.5);
+let selected=shuffled.slice(0,3);
+
+selected.forEach((card,index)=>{
+
+const reversed=Math.random()>0.5;
+
+const cardDiv=document.createElement("div");
+cardDiv.classList.add("readingCard");
+
+const img=document.createElement("img");
+img.src=card.img;
+img.style.transform=reversed?"rotate(180deg)":"rotate(0deg)";
+
+const title=document.createElement("h3");
+title.textContent=positions[index]+" - "+card.name;
+
+const meaning=document.createElement("p");
+meaning.textContent=reversed?card.rev:card.up;
+
+cardDiv.appendChild(img);
+cardDiv.appendChild(title);
+cardDiv.appendChild(meaning);
+
+container.appendChild(cardDiv);
+
+});
+
+overlay.style.display="flex";
+startConfetti();
+
+}
+
+function closeOverlay(){
+overlay.style.display="none";
+}
+
+function goBack(){
+window.location.href="index.html";
+}
+
+createFan();
+
+</script>
+
+</body>
+</html>
+

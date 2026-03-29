@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="nl">
+<!DOCTYPE html>
+<html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,57 +11,64 @@
       background: radial-gradient(circle, #1a1a1a, #000);
       color: white;
       margin: 0;
-    }.slot {
-  font-size: 50px;
-  margin: 8px;
-  display: inline-block;
-  width: 80px;
-  height: 80px;
-  line-height: 80px;
-  border: 3px solid gold;
-  border-radius: 15px;
-  background: #222;
-  box-shadow: 0 0 10px gold;
-}
+    }
 
-.spin { animation: spin 0.2s linear infinite; }
+    .slot {
+      font-size: 50px;
+      margin: 8px;
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      border: 3px solid gold;
+      border-radius: 15px;
+      background: #222;
+      box-shadow: 0 0 10px gold;
+    }
 
-@keyframes spin {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0); }
-}
+    .spin { animation: spin 0.2s linear infinite; }
 
-button, select {
-  padding: 10px;
-  margin: 5px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-}
+    @keyframes spin {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
 
-button { background: gold; font-weight: bold; }
+    button, select {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
 
-@media (max-width: 600px) {
-  .slot {
-    width: 50px;
-    height: 50px;
-    font-size: 28px;
-    line-height: 50px;
-  }
-}
+    button { background: gold; font-weight: bold; }
 
+    @media (max-width: 600px) {
+      .slot {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+        line-height: 50px;
+      }
+    }
   </style>
 </head>
-<body><h1>🎰 Gokkast Deluxe+</h1>
+<body>
+
+<h1>🎰 Gokkast Deluxe+</h1>
 <p>Punten: <span id="score">100</span></p>
-<p>Schuld: <span id="debt">0</span></p><div id="slots">
+<p>Schuld: <span id="debt">0</span></p>
+
+<div id="slots">
   <div class="slot" id="s1">🍒</div>
   <div class="slot" id="s2">🍋</div>
   <div class="slot" id="s3">🍉</div>
   <div class="slot" id="s4">⭐</div>
   <div class="slot" id="s5">💎</div>
-</div><div>
+</div>
+
+<div>
   <select id="bet">
     <option value="5">5</option>
     <option value="10" selected>10</option>
@@ -69,7 +77,11 @@ button { background: gold; font-weight: bold; }
   <br>
   <button onclick="spin()">Draai</button>
   <button onclick="addCredits()">+100 Credits</button>
-</div><p id="result"></p><script>
+</div>
+
+<p id="result"></p>
+
+<script>
   const symbols = ["🍒","🍋","🍉","⭐","💎","7️⃣"];
   let score = parseInt(localStorage.getItem('score')) || 100;
   let debt = parseInt(localStorage.getItem('debt')) || 0;
@@ -139,5 +151,7 @@ button { background: gold; font-weight: bold; }
     document.getElementById("result").innerText = "+100 credits (schuld verhoogd!)";
     updateUI();
   }
-</script></body>
+</script>
+
+</body>
 </html>

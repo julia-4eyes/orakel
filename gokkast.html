@@ -6,223 +6,302 @@
 <title>Gokkast Deluxe+ Casino</title>
 
 <style>
-body {margin:0;font-family:Arial;background:radial-gradient(circle,#0a0a0a,#000);color:white;}
-.app {max-width:420px;margin:auto;padding:15px;}
-.header {display:flex;justify-content:space-between;background:#111;padding:12px;border-radius:12px;box-shadow:0 0 10px gold;}
-
-.slots {margin:20px 0;display:flex;justify-content:space-between;}
-
-.reel {
-  width:60px;
-  height:60px;
-  overflow:hidden;
-  border-radius:10px;
-  border:2px solid gold;
-  background:#111;
-  box-shadow:0 0 10px gold;
-  position:relative;
-}
-
-.reel-track {
-  position:absolute;
-  width:100%;
-}
-
-.symbol {
-  height:60px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-}
-
-button {width:100%;padding:14px;border:none;border-radius:12px;margin-top:10px;font-size:16px;background:linear-gradient(45deg,gold,orange);font-weight:bold;}
-.bet-select {width:100%;padding:10px;border-radius:10px;margin-top:10px;}
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: radial-gradient(circle at center, #1a0033, #000);
+        color: white;
+        text-align: center;
+    }
+    .app {
+        max-width: 440px;
+        margin: 20px auto;
+        padding: 15px;
+        background: rgba(0,0,0,0.7);
+        border-radius: 20px;
+        box-shadow: 0 0 30px rgba(255,215,0,0.6);
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        background: linear-gradient(90deg, #222, #111);
+        padding: 15px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        border: 2px solid gold;
+    }
+    .balance {
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+    .slots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 25px 0;
+        padding: 15px;
+        background: #0a0a0a;
+        border-radius: 15px;
+        border: 3px solid #ffd700;
+    }
+    .reel {
+        width: 70px;
+        height: 210px;
+        overflow: hidden;
+        border-radius: 12px;
+        border: 3px solid #ffd700;
+        background: #111;
+        box-shadow: 0 0 15px gold;
+        position: relative;
+    }
+    .reel-track {
+        position: absolute;
+        width: 100%;
+        transition: transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .symbol {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        background: rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,215,0,0.2);
+    }
+    button {
+        width: 100%;
+        padding: 16px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .spin-btn {
+        background: linear-gradient(45deg, #ffd700, #ffaa00);
+        color: black;
+        font-size: 22px;
+    }
+    .bet-select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        background: #222;
+        color: white;
+        border: 2px solid gold;
+        font-size: 16px;
+    }
+    .result {
+        min-height: 28px;
+        font-size: 1.4em;
+        font-weight: bold;
+        margin: 15px 0;
+    }
+    .win { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+    .lose { color: #ff6666; }
 </style>
 </head>
 <body>
 
 <div class="app">
-  <h2>🎰 Casino Slots</h2>
+    <h1>🎰 Gokkast Deluxe+</h1>
 
-  <div class="header">
-    <div>💰 <span id="score">100</span></div>
-    <div>💳 Bank: <span id="bank">0</span></div>
-  </div>
+    <div class="header">
+        <div class="balance">💰 Saldo: <span id="score">500</span></div>
+        <div class="balance">🏦 Bank: <span id="bank">0</span></div>
+    </div>
 
-  <div class="slots" id="slots"></div>
+    <div class="slots" id="slots"></div>
 
-  <select id="bet" class="bet-select">
-    <option value="10">10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
-  </select>
+    <select id="bet" class="bet-select">
+        <option value="10">Inzet: 10 credits</option>
+        <option value="25">Inzet: 25 credits</option>
+        <option value="50" selected>Inzet: 50 credits</option>
+        <option value="100">Inzet: 100 credits</option>
+    </select>
 
-  <button onclick="spin()">🎰 SPIN</button>
-  <button id="autoBtn" onclick="toggleAutoSpin()">⚡ AUTO SPIN</button>
-  <button onclick="addCredits()">➕ +100 Credits</button>
-  <button onclick="cashOut()">💸 Inlossen</button>
+    <button class="spin-btn" onclick="spin()">🎰 SPIN</button>
+    <button id="autoBtn" onclick="toggleAutoSpin()">⚡ AUTO SPIN</button>
+    <button onclick="addCredits()">➕ +200 Credits</button>
+    <button onclick="cashOut()">💸 Winst Inlossen</button>
 
-  <p id="result"></p>
+    <p id="result" class="result"></p>
 </div>
 
 <script>
-const symbols=["🍒","🍋","🍉","⭐","💎","7️⃣"];
-let score=100,bank=0,spinning=false,lastWin=0;
-let autoInterval=null;
+const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "💎", "7️⃣", "🔔"];
+let score = 500;
+let bank = 0;
+let spinning = false;
+let autoInterval = null;
+let lastWin = 0;
 
-function createReelTrack(){
-  let track=document.createElement("div");
-  track.className="reel-track";
+const scoreEl = document.getElementById("score");
+const bankEl = document.getElementById("bank");
+const resultEl = document.getElementById("result");
+const betEl = document.getElementById("bet");
+const autoBtn = document.getElementById("autoBtn");
 
-  for(let i=0;i<30;i++){
-    let div=document.createElement("div");
-    div.className="symbol";
-    div.innerText=symbols[Math.floor(Math.random()*symbols.length)];
-    track.appendChild(div);
-  }
+function createReel() {
+    const reel = document.createElement("div");
+    reel.className = "reel";
 
-  return track;
-}
+    const track = document.createElement("div");
+    track.className = "reel-track";
 
-function renderSlots(){
-  let c=document.getElementById("slots");
-  c.innerHTML="";
-
-  for(let i=0;i<5;i++){
-    let reel=document.createElement("div");
-    reel.className="reel";
-
-    let track=createReelTrack();
+    // Maak lange track voor realistisch scroll effect
+    for (let i = 0; i < 40; i++) {
+        const sym = document.createElement("div");
+        sym.className = "symbol";
+        sym.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        track.appendChild(sym);
+    }
     reel.appendChild(track);
-    c.appendChild(reel);
-  }
+    return reel;
 }
 
-function spin(){
-  if(spinning) return;
-  let bet=parseInt(betEl.value);
-  if(score<bet) return;
-
-  spinning=true;
-  score-=bet;
-
-  let reels=document.querySelectorAll(".reel-track");
-  let results=[];
-
-  reels.forEach((track,i)=>{
-    let pos=0;
-
-    // 🔥 continue scroll (echte rol)
-    let speed=20 + i*5;
-    let interval=setInterval(()=>{
-      pos+=speed;
-      track.style.transform=`translateY(-${pos}px)`;
-
-      // reset voor infinite effect
-      if(pos >= track.scrollHeight/2){
-        pos=0;
-        track.style.transition="none";
-        track.style.transform=`translateY(0px)`;
-      }
-    },16);
-
-    // stop na tijd
-    setTimeout(()=>{
-      clearInterval(interval);
-
-      let finalSymbol=symbols[Math.floor(Math.random()*symbols.length)];
-      results.push(finalSymbol);
-
-      // smooth uitrollen naar eindpositie
-      let index=Math.floor(Math.random()*10);
-      let finalPos=index*60;
-
-      track.style.transition="transform 0.5s ease-out";
-      track.style.transform=`translateY(-${finalPos}px)`;
-
-      // zet echte symbolen
-      setTimeout(()=>{
-        track.innerHTML="";
-        for(let j=0;j<3;j++){
-          let div=document.createElement("div");
-          div.className="symbol";
-          div.innerText=finalSymbol;
-          track.appendChild(div);
-        }
-
-        track.style.transform="translateY(0)";
-
-        if(results.length===5) finishSpin(results,bet);
-      },500);
-
-    },1500 + i*400);
-  });
-
-  updateUI();
+function renderSlots() {
+    const container = document.getElementById("slots");
+    container.innerHTML = "";
+    for (let i = 0; i < 5; i++) {
+        container.appendChild(createReel());
+    }
 }
 
-function finishSpin(results,bet){
-  let win=checkWin(results,bet);
-  lastWin=win;
+function spin() {
+    if (spinning) return;
 
-  if(win>0){
-    score+=win;
-    result.innerText="🎉 WIN +"+win;
-  } else result.innerText="❌ Geen winst";
+    const bet = parseInt(betEl.value);
+    if (score < bet) {
+        resultEl.innerHTML = "❌ Niet genoeg credits!";
+        resultEl.className = "result lose";
+        return;
+    }
 
-  spinning=false;
-  updateUI();
-}
-
-function cashOut(){
-  if(lastWin>0){
-    bank+=lastWin;
-    lastWin=0;
-    result.innerText="💸 Ingelost";
+    spinning = true;
+    score -= bet;
     updateUI();
-  }
+    resultEl.innerHTML = "";
+
+    const reels = document.querySelectorAll(".reel-track");
+    const finalResults = [];
+
+    reels.forEach((track, index) => {
+        // Snelle spin
+        let position = 0;
+        const baseSpeed = 35 + index * 8;
+
+        const spinInterval = setInterval(() => {
+            position += baseSpeed;
+            track.style.transform = `translateY(-${position}px)`;
+        }, 16);
+
+        // Stop op verschillende tijden voor cascade effect
+        setTimeout(() => {
+            clearInterval(spinInterval);
+
+            // Bepaal winnend symbool (laatste 3 symbolen worden hetzelfde)
+            const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+            finalResults.push(finalSymbol);
+
+            // Stop op een mooi rond getal
+            const stopPosition = Math.floor(Math.random() * 15) * 70 + 70; // align met symbool
+
+            track.style.transition = "transform 0.7s cubic-bezier(0.23, 1, 0.32, 1)";
+            track.style.transform = `translateY(-${stopPosition}px)`;
+
+            // Vervang de track door 3 identieke symbolen voor duidelijk resultaat
+            setTimeout(() => {
+                track.innerHTML = "";
+                for (let j = 0; j < 3; j++) {
+                    const sym = document.createElement("div");
+                    sym.className = "symbol";
+                    sym.textContent = finalSymbol;
+                    track.appendChild(sym);
+                }
+                track.style.transition = "none";
+                track.style.transform = "translateY(0px)";
+
+                // Als alle reels klaar zijn → bereken winst
+                if (finalResults.length === 5) {
+                    finishSpin(finalResults, bet);
+                }
+            }, 800);
+
+        }, 800 + index * 350);
+    });
 }
 
-function checkWin(arr,bet){
-  let c={};arr.forEach(s=>c[s]=(c[s]||0)+1);
-  let max=Math.max(...Object.values(c));
-  if(max===5)return bet*10;
-  if(max===4)return bet*5;
-  if(max===3)return bet*2;
-  return 0;
+function finishSpin(results, bet) {
+    const win = calculateWin(results, bet);
+    lastWin = win;
+
+    if (win > 0) {
+        score += win;
+        resultEl.innerHTML = `🎉 GROTE WIN! +${win} credits!`;
+        resultEl.className = "result win";
+    } else {
+        resultEl.innerHTML = "😢 Geen winst deze keer...";
+        resultEl.className = "result lose";
+    }
+
+    spinning = false;
+    updateUI();
 }
 
-function toggleAutoSpin(){
-  if(autoInterval){
-    clearInterval(autoInterval);
-    autoInterval=null;
-    autoBtn.innerText="⚡ AUTO SPIN";
-  } else {
-    autoInterval=setInterval(()=>{
-      if(score<10) toggleAutoSpin();
-      else spin();
-    },1800);
-    autoBtn.innerText="⛔ STOP AUTO";
-  }
+function calculateWin(results, bet) {
+    const counts = {};
+    results.forEach(s => counts[s] = (counts[s] || 0) + 1);
+
+    const maxCount = Math.max(...Object.values(counts));
+
+    if (maxCount === 5) return bet * 25;      // Alle 5 hetzelfde → jackpot
+    if (maxCount === 4) return bet * 8;
+    if (maxCount === 3) return bet * 3;
+    return 0;
 }
 
-function addCredits(){
-  score+=100;
-  updateUI();
+function cashOut() {
+    if (lastWin > 0) {
+        bank += lastWin;
+        lastWin = 0;
+        resultEl.innerHTML = "✅ Winst succesvol ingelost!";
+        resultEl.className = "result";
+        updateUI();
+    } else {
+        resultEl.innerHTML = "Geen winst om in te lossen";
+    }
 }
 
-function updateUI(){
-  scoreEl.innerText=score;
-  bankEl.innerText=bank;
+function toggleAutoSpin() {
+    if (autoInterval) {
+        clearInterval(autoInterval);
+        autoInterval = null;
+        autoBtn.textContent = "⚡ AUTO SPIN";
+    } else {
+        autoBtn.textContent = "⛔ STOP AUTO";
+        autoInterval = setInterval(() => {
+            if (!spinning && score >= parseInt(betEl.value)) {
+                spin();
+            } else if (score < parseInt(betEl.value)) {
+                toggleAutoSpin();
+            }
+        }, 2200);
+    }
 }
 
-const scoreEl=document.getElementById("score");
-const bankEl=document.getElementById("bank");
-const result=document.getElementById("result");
-const betEl=document.getElementById("bet");
-const autoBtn=document.getElementById("autoBtn");
+function addCredits() {
+    score += 200;
+    updateUI();
+}
 
+function updateUI() {
+    scoreEl.textContent = score;
+    bankEl.textContent = bank;
+}
+
+// Start het spel
 renderSlots();
 updateUI();
 </script>

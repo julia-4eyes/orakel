@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gokkast Deluxe+</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: radial-gradient(circle, #1a1a1a, #000);
+      color: white;
+      margin: 0;
+    }.slot {
+  font-size: 50px;
+  margin: 8px;
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  border: 3px solid gold;
+  border-radius: 15px;
+  background: #222;
+  box-shadow: 0 0 10px gold;
+}
+
+.spin { animation: spin 0.2s linear infinite; }
+
+@keyframes spin {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+button, select {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+button { background: gold; font-weight: bold; }
+
+@media (max-width: 600px) {
+  .slot {
+    width: 50px;
+    height: 50px;
+    font-size: 28px;
+    line-height: 50px;
+  }
+}
+
+  </style>
+</head>
+<body><h1>🎰 Gokkast Deluxe+</h1>
+<p>Punten: <span id="score">100</span></p>
+<p>Schuld: <span id="debt">0</span></p><div id="slots">
+  <div class="slot" id="s1">🍒</div>
+  <div class="slot" id="s2">🍋</div>
+  <div class="slot" id="s3">🍉</div>
+  <div class="slot" id="s4">⭐</div>
+  <div class="slot" id="s5">💎</div>
+</div><div>
+  <select id="bet">
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="20">20</option>
+  </select>
+  <br>
+  <button onclick="spin()">Draai</button>
+  <button onclick="addCredits()">+100 Credits</button>
+</div><p id="result"></p><script>
+  const symbols = ["🍒","🍋","🍉","⭐","💎","7️⃣"];
+  let score = parseInt(localStorage.getItem('score')) || 100;
+  let debt = parseInt(localStorage.getItem('debt')) || 0;
+
+  updateUI();
+
+  function updateUI() {
+    document.getElementById('score').innerText = score;
+    document.getElementById('debt').innerText = debt;
+    localStorage.setItem('score', score);
+    localStorage.setItem('debt', debt);
+  }
+
+  function spin() {
+    let bet = parseInt(document.getElementById("bet").value);
+
+    if (score < bet) {
+      document.getElementById("result").innerText = "Niet genoeg punten!";
+      return;
+    }
+
+    score -= bet;
+    updateUI();
+
+    let results = [];
+
+    for (let i = 1; i <= 5; i++) {
+      document.getElementById("s"+i).classList.add("spin");
+    }
+
+    setTimeout(() => {
+      for (let i = 1; i <= 5; i++) {
+        let rand = symbols[Math.floor(Math.random()*symbols.length)];
+        let slot = document.getElementById("s"+i);
+        slot.classList.remove("spin");
+        slot.innerText = rand;
+        results.push(rand);
+      }
+
+      let win = checkWin(results, bet);
+
+      if (win > 0) {
+        score += win;
+        document.getElementById("result").innerText = "🎉 Gewonnen! +"+win;
+      } else {
+        document.getElementById("result").innerText = "Geen winst";
+      }
+
+      updateUI();
+    }, 800);
+  }
+
+  function checkWin(arr, bet) {
+    let counts = {};
+    arr.forEach(s => counts[s] = (counts[s]||0)+1);
+    let max = Math.max(...Object.values(counts));
+
+    if (max === 5) return bet*10;
+    if (max === 4) return bet*5;
+    if (max === 3) return bet*2;
+    return 0;
+  }
+
+  function addCredits() {
+    score += 100;
+    debt += 100;
+    document.getElementById("result").innerText = "+100 credits (schuld verhoogd!)";
+    updateUI();
+  }
+</script></body>
+</html>

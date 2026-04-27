@@ -1,308 +1,984 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gokkast Deluxe+ Casino</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>INSANE Slot | Joker Jackpot 🃏💣</title>
+  <style>
+    * {
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
 
-<style>
     body {
-        margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background: radial-gradient(circle at center, #1a0033, #000);
-        color: white;
-        text-align: center;
+      font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+      text-align: center;
+      background: radial-gradient(circle at 20% 30%, #0a0c12, #000000);
+      color: #f5e7c8;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 8px 10px 20px;
+      position: relative;
     }
-    .app {
-        max-width: 440px;
-        margin: 20px auto;
-        padding: 15px;
-        background: rgba(0,0,0,0.75);
-        border-radius: 20px;
-        box-shadow: 0 0 30px rgba(255,215,0,0.6);
+
+    /* MYSTERY OVERLAY (gouden jackpot variant) */
+    .mystery-overlay, .jackpot-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.3s ease;
+      pointer-events: none;
     }
-    .header {
-        display: flex;
-        justify-content: space-between;
-        background: linear-gradient(90deg, #222, #111);
-        padding: 15px;
-        border-radius: 15px;
-        margin-bottom: 20px;
-        border: 2px solid gold;
+    .mystery-overlay.show, .jackpot-overlay.show {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
     }
-    .balance { font-size: 1.3em; font-weight: bold; }
-    .slots {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-        margin: 25px 0;
-        padding: 15px;
-        background: #0a0a0a;
-        border-radius: 15px;
-        border: 3px solid #ffd700;
+    @keyframes overlaySlowBlink {
+      0% { opacity: 1; visibility: visible; }
+      50% { opacity: 0; visibility: visible; }
+      100% { opacity: 1; visibility: visible; }
     }
+    .mystery-overlay.blinking, .jackpot-overlay.blinking {
+      animation: overlaySlowBlink 1s ease-in-out;
+    }
+    .mystery-card, .jackpot-card {
+      background: rgba(10, 8, 20, 0.92);
+      backdrop-filter: blur(16px);
+      border: 2px solid #ffd966;
+      border-radius: 48px;
+      padding: 18px 28px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(255,215,0,0.5), inset 0 0 10px rgba(255,215,0,0.3);
+      animation: floatPop 0.4s cubic-bezier(0.2, 1.2, 0.4, 1);
+      max-width: 280px;
+      width: auto;
+      pointer-events: auto;
+    }
+    .jackpot-card {
+      background: linear-gradient(145deg, #2a1f0a, #1a1205);
+      border: 3px solid #ffcc33;
+      box-shadow: 0 0 60px gold, inset 0 0 20px rgba(255,215,0,0.5);
+    }
+    .jackpot-card h2 {
+      font-size: 1.6rem;
+      color: #ffcc33;
+      text-shadow: 0 0 10px #ffaa00;
+    }
+    .jackpot-card .jackpot-icon {
+      font-size: 4rem;
+      margin: 8px 0;
+      animation: jackpotBounce 0.6s ease;
+    }
+    @keyframes jackpotBounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.3); text-shadow: 0 0 20px gold; }
+    }
+    .jackpot-card .prize {
+      font-size: 2.5rem;
+      background: linear-gradient(45deg, #ffdd77, #ffaa33);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
+    }
+    @keyframes floatPop {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .mystery-card h2, .jackpot-card h2 {
+      margin: 0 0 4px;
+      color: #ffd966;
+      text-shadow: 0 0 6px #ffaa33;
+    }
+    .cherry-icon, .jackpot-icon {
+      font-size: 2.8rem;
+      margin: 4px 0;
+    }
+    .prize {
+      font-size: 2.2rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #ffdd77, #ff9933);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin: 8px 0;
+      min-height: 55px;
+      letter-spacing: 2px;
+    }
+    .prize.glitch-effect {
+      animation: glitchFlash 0.12s steps(2) 4;
+    }
+    @keyframes glitchFlash {
+      0% { text-shadow: -2px 0 red, 2px 0 blue; opacity: 0.8; transform: skewX(0deg);}
+      50% { text-shadow: 2px 0 red, -2px 0 blue; opacity: 1; transform: skewX(2deg);}
+      100% { text-shadow: 0 0 gold; opacity: 1; transform: skewX(0deg);}
+    }
+    .mystery-card button, .jackpot-card button {
+      background: radial-gradient(circle, #ffd966, #e6a017);
+      border: none;
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 2px 0 #705a2c;
+    }
+    .mystery-card button:active, .jackpot-card button:active {
+      transform: translateY(2px);
+      box-shadow: 0 0px 0 #705a2c;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #ffd966, #ffb347);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 4px rgba(255, 200, 0, 0.5);
+      margin: 0 0 6px 0;
+      font-weight: 800;
+    }
+
+    #paytable {
+      margin: 5px auto 8px;
+      max-width: 360px;
+      background: #0e0c14e0;
+      backdrop-filter: blur(2px);
+      border: 1.5px solid #f5b642;
+      border-radius: 28px;
+      padding: 5px 12px;
+    }
+
+    .payrow {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 8px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      border-bottom: 1px solid #2a2418;
+      border-radius: 40px;
+      margin: 1px 0;
+    }
+
+    .payrow.active {
+      background: radial-gradient(circle, #ffd966, #e6a017);
+      color: #1f1b10;
+      box-shadow: 0 0 8px gold;
+    }
+
+    .stats-panel {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      background: #000000aa;
+      backdrop-filter: blur(8px);
+      padding: 5px 20px;
+      border-radius: 60px;
+      margin: 5px auto 8px;
+      width: fit-content;
+      border: 1px solid #ffcd7e;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .stats-panel span {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #ffdfa5;
+      margin-left: 6px;
+    }
+
+    #machine {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 8px auto 12px;
+      background: #030205b3;
+      padding: 15px 12px;
+      border-radius: 48px;
+      box-shadow: inset 0 0 5px #ffbe3c, 0 8px 18px black;
+      flex-wrap: nowrap;
+      width: 90%;
+      max-width: 500px;
+    }
+
     .reel {
-        width: 70px;
-        height: 210px;
-        overflow: hidden;
-        border-radius: 12px;
-        border: 3px solid #ffd700;
-        background: #111;
-        box-shadow: 0 0 15px gold;
+      flex: 1;
+      min-width: 0;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      margin: 0;
+      border: 3px solid #f3b33d;
+      border-radius: 20px;
+      background: #0f0c12;
+      box-shadow: 0 0 0 2px #3e2a10, inset 0 0 12px rgba(0,0,0,0.7);
+      position: relative;
     }
-    .reel-track {
-        transition: transform 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+    .strip {
+      position: absolute;
+      width: 100%;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
     }
+
     .symbol {
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 42px;
-        background: rgba(255,255,255,0.05);
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(28px, 10vw, 58px);
+      font-weight: 500;
+      text-shadow: 0 2px 5px black;
+      background: #1a1423;
+      border-bottom: 1px solid #ffbe4d20;
     }
+
+    .win {
+      animation: insaneBlink 0.2s ease-in-out 4;
+      box-shadow: 0 0 0 3px gold, inset 0 0 15px yellow;
+      border-radius: 16px;
+    }
+
+    @keyframes insaneBlink {
+      0% { background-color: #4a2a00; color: gold; transform: scale(1); }
+      50% { background-color: #ffdd77; color: black; text-shadow: none; transform: scale(1.05); }
+      100% { background-color: #1a1423; color: white; transform: scale(1); }
+    }
+
+    .bigwin {
+      font-size: 1.4rem;
+      font-weight: 900;
+      background: linear-gradient(45deg, #ffb347, #ffdd77);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: popRumble 0.4s ease infinite alternate;
+      display: inline-block;
+    }
+
+    @keyframes popRumble {
+      0% { transform: scale(0.96); opacity: 0.9; }
+      100% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 8px rgb(255, 215, 0); }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 10px 0 6px;
+    }
+
+    button, select {
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: none;
+      background: #212121;
+      color: #ffdd99;
+      cursor: pointer;
+      transition: 0.05s linear;
+      box-shadow: 0 2px 0 #705a2c;
+      font-family: inherit;
+    }
+
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 0px 0 #705a2c;
+    }
+
     button {
-        width: 100%;
-        padding: 16px;
-        margin: 8px 0;
-        border: none;
-        border-radius: 12px;
-        font-size: 18px;
-        font-weight: bold;
-        cursor: pointer;
+      background: radial-gradient(circle at 30% 10%, #e6b422, #b87c10);
+      color: #1f1a0c;
+      text-shadow: 0 1px 0 #ffdd99;
     }
-    .spin-btn {
-        background: linear-gradient(45deg, #ffd700, #ffaa00);
-        color: black;
-        font-size: 22px;
+
+    select {
+      background: #2c2418;
+      border: 1px solid #ffbe4d;
+      color: #ffdd99;
+      padding: 8px 14px;
     }
-    .bet-select {
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        background: #222;
-        color: white;
-        border: 2px solid gold;
-        font-size: 16px;
+
+    #result {
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 6px 0 0;
+      min-height: 52px;
+      background: #00000099;
+      padding: 6px 14px;
+      border-radius: 40px;
+      display: inline-block;
+      backdrop-filter: blur(4px);
+      max-width: 95%;
     }
-    .result {
-        min-height: 32px;
-        font-size: 1.45em;
-        font-weight: bold;
-        margin: 15px 0;
+
+    footer {
+      font-size: 0.6rem;
+      margin-top: 8px;
+      opacity: 0.7;
     }
-    .win { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
-    .lose { color: #ff6666; }
-</style>
+  </style>
 </head>
 <body>
 
-<div class="app">
-    <h1>🎰 Gokkast Deluxe+</h1>
+<h1>🎰 INSANE SLOT 🃏</h1>
 
-    <div class="header">
-        <div class="balance">💰 Saldo: <span id="score">500</span></div>
-        <div class="balance">🏦 Bank: <span id="bank">0</span></div>
-    </div>
+<div id="paytable">
+  <div class="payrow" id="p4"><div>🍒🍒🍒🍒 (4x) OF 4 dezelfde</div><div>x12</div></div>
+  <div class="payrow" id="p3"><div>🍋🍋🍋 (3x, geen kers)</div><div>x10</div></div>
+  <div class="payrow" id="p2"><div>⭐⭐ (2x, geen kers)</div><div>x5</div></div>
+  <div class="payrow" style="border-bottom: none; font-size:0.6rem;">🔗 Alleen vanaf links! | 🃏 op rol1 = JACKPOT 1500! | 🍒(rol1)=MYSTERY 0-50 | 🍒🍒=MYSTERY 0-100</div>
+</div>
 
-    <div class="slots" id="slots"></div>
+<div class="stats-panel">
+  <div>💰 PUNTEN: <span id="score">0</span></div>
+  <div>💸 SCHULD: <span id="debt">0</span></div>
+</div>
 
-    <select id="bet" class="bet-select">
-        <option value="10">Inzet: 10</option>
-        <option value="25">Inzet: 25</option>
-        <option value="50" selected>Inzet: 50</option>
-        <option value="100">Inzet: 100</option>
-    </select>
+<div id="machine">
+  <div class="reel"><div class="strip" id="r1"></div></div>
+  <div class="reel"><div class="strip" id="r2"></div></div>
+  <div class="reel"><div class="strip" id="r3"></div></div>
+  <div class="reel"><div class="strip" id="r4"></div></div>
+</div>
 
-    <button class="spin-btn" onclick="spin()">🎰 SPIN</button>
-    <button id="autoBtn" onclick="toggleAutoSpin()">⚡ AUTO SPIN</button>
-    <button onclick="addCredits()">➕ +200 Credits</button>
-    <button onclick="cashOut()">💸 Winst Inlossen</button>
+<div class="controls">
+  <select id="bet">
+    <option value="5">5</option>
+    <option value="10" selected>10</option>
+    <option value="20">20</option>
+    <option value="50">50</option>
+  </select>
+  <button id="spinBtn">🌀 DRAAI</button>
+  <button id="addBtn">✨ +100</button>
+  <button id="debtBtn">💳 -50</button>
+</div>
 
-    <p id="result" class="result"></p>
+<div id="result">✨ Joker op rol 1 = JACKPOT 1500! 🃏💣 ✨</div>
+<footer>🔊 Rollengeluid | JACKPOT: bomgeluid + gouden overlay</footer>
+
+<!-- Mystery overlay (kersen) -->
+<div id="mysteryOverlay" class="mystery-overlay">
+  <div class="mystery-card">
+    <h2 id="mysteryTitle">CHERRY MYSTERY</h2>
+    <div class="cherry-icon" id="mysteryCherryIcon">🍒</div>
+    <div class="prize" id="mysteryPrizeAmount">+?</div>
+    <button id="closeMysteryBtn">VERZAMELEN</button>
+  </div>
+</div>
+
+<!-- Jackpot overlay (goud) -->
+<div id="jackpotOverlay" class="jackpot-overlay">
+  <div class="jackpot-card">
+    <h2>💣 JACKPOT! 💣</h2>
+    <div class="jackpot-icon">🃏</div>
+    <div class="prize" id="jackpotPrizeAmount">+1500</div>
+    <button id="closeJackpotBtn">VERZAMELEN</button>
+  </div>
 </div>
 
 <script>
-const symbols = ["🍒", "🍋", "🍉", "🍇", "⭐", "💎", "7️⃣", "🔔"];
-let score = 500, bank = 0, spinning = false, autoInterval = null, lastWin = 0;
-
-const scoreEl = document.getElementById("score");
-const bankEl = document.getElementById("bank");
-const resultEl = document.getElementById("result");
-const betEl = document.getElementById("bet");
-const autoBtn = document.getElementById("autoBtn");
-
-let reels = [];   // We houden de tracks bij
-
-function createReelTrack() {
-    const track = document.createElement("div");
-    track.className = "reel-track";
-    
-    for (let i = 0; i < 35; i++) {
-        const sym = document.createElement("div");
-        sym.className = "symbol";
-        sym.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-        track.appendChild(sym);
+  // ========== GELUIDEN MET AudioContext ==========
+  let audioCtx = null;
+  let isAudioAllowed = false;
+  let spinOscillator = null;
+  let spinGain = null;
+  let isSpinningSoundPlaying = false;
+  
+  async function ensureAudioContext() {
+    if (!audioCtx) {
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        isAudioAllowed = true;
+      } catch(e) { console.log("Web Audio not supported"); return false; }
     }
-    return track;
-}
-
-function renderSlots() {
-    const container = document.getElementById("slots");
-    container.innerHTML = "";
-    reels = [];
-    
-    for (let i = 0; i < 5; i++) {
-        const reelContainer = document.createElement("div");
-        reelContainer.className = "reel";
-        
-        const track = createReelTrack();
-        reelContainer.appendChild(track);
-        container.appendChild(reelContainer);
-        
-        reels.push(track);   // Belangrijk: we bewaren de track elementen
+    if (audioCtx.state === 'suspended') {
+      await audioCtx.resume();
     }
-}
-
-function spin() {
-    if (spinning) return;
-
-    const bet = parseInt(betEl.value);
+    return true;
+  }
+  
+  async function startSpinSound() {
+    const ok = await ensureAudioContext();
+    if (!ok) return;
+    if (isSpinningSoundPlaying) return;
+    try {
+      if (spinOscillator) {
+        try { spinOscillator.stop(); } catch(e) {}
+        spinOscillator = null;
+      }
+      spinGain = audioCtx.createGain();
+      spinGain.gain.value = 0.22;
+      spinGain.connect(audioCtx.destination);
+      
+      spinOscillator = audioCtx.createOscillator();
+      spinOscillator.type = 'sawtooth';
+      spinOscillator.frequency.value = 175;
+      spinOscillator.connect(spinGain);
+      spinOscillator.start();
+      
+      let interval = setInterval(() => {
+        if (!isSpinningSoundPlaying || !spinOscillator) {
+          clearInterval(interval);
+          return;
+        }
+        if (spinOscillator && spinOscillator.frequency) {
+          spinOscillator.frequency.value = 165 + Math.random() * 45;
+        }
+      }, 70);
+      
+      spinOscillator.onended = () => {
+        clearInterval(interval);
+        spinOscillator = null;
+      };
+      isSpinningSoundPlaying = true;
+    } catch(e) { console.log("spin sound error"); }
+  }
+  
+  function stopSpinSound() {
+    if (!isSpinningSoundPlaying) return;
+    try {
+      if (spinOscillator) {
+        spinOscillator.stop();
+        spinOscillator.disconnect();
+        spinOscillator = null;
+      }
+      if (spinGain) {
+        spinGain.disconnect();
+        spinGain = null;
+      }
+    } catch(e) {}
+    isSpinningSoundPlaying = false;
+  }
+  
+  async function playWinSound() {
+    const ok = await ensureAudioContext();
+    if (!ok) return;
+    try {
+      const now = audioCtx.currentTime;
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.45;
+      gainNode.connect(audioCtx.destination);
+      const freqs = [523.25, 659.25, 783.99];
+      freqs.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        const noteGain = audioCtx.createGain();
+        noteGain.gain.value = 0;
+        osc.connect(noteGain);
+        noteGain.connect(gainNode);
+        osc.start();
+        const startTime = now + idx * 0.12;
+        const endTime = startTime + 0.5;
+        noteGain.gain.setValueAtTime(0, startTime);
+        noteGain.gain.linearRampToValueAtTime(0.4, startTime + 0.05);
+        noteGain.gain.exponentialRampToValueAtTime(0.0001, endTime);
+        osc.stop(endTime);
+      });
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+    } catch(e) { console.log("win sound error", e); }
+  }
+  
+  async function playSirenSound() {
+    const ok = await ensureAudioContext();
+    if (!ok) return;
+    try {
+      const now = audioCtx.currentTime;
+      const masterGain = audioCtx.createGain();
+      masterGain.gain.value = 0.55;
+      masterGain.connect(audioCtx.destination);
+      
+      const osc1 = audioCtx.createOscillator();
+      osc1.type = 'sine';
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = 'sine';
+      
+      const gain1 = audioCtx.createGain();
+      const gain2 = audioCtx.createGain();
+      gain1.gain.value = 0.4;
+      gain2.gain.value = 0.4;
+      
+      osc1.connect(gain1);
+      osc2.connect(gain2);
+      gain1.connect(masterGain);
+      gain2.connect(masterGain);
+      
+      osc1.start();
+      osc2.start();
+      
+      const startFreq = 650;
+      const endFreq = 880;
+      const duration = 1.2;
+      
+      const freqParam1 = osc1.frequency;
+      const freqParam2 = osc2.frequency;
+      
+      freqParam1.setValueAtTime(startFreq, now);
+      freqParam1.exponentialRampToValueAtTime(endFreq, now + duration * 0.4);
+      freqParam1.exponentialRampToValueAtTime(startFreq, now + duration * 0.8);
+      freqParam1.exponentialRampToValueAtTime(endFreq, now + duration);
+      
+      freqParam2.setValueAtTime(startFreq + 30, now + 0.05);
+      freqParam2.exponentialRampToValueAtTime(endFreq + 40, now + 0.05 + duration * 0.4);
+      freqParam2.exponentialRampToValueAtTime(startFreq + 20, now + 0.05 + duration * 0.8);
+      freqParam2.exponentialRampToValueAtTime(endFreq + 30, now + 0.05 + duration);
+      
+      masterGain.gain.setValueAtTime(0.55, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + duration + 0.2);
+      
+      osc1.stop(now + duration + 0.15);
+      osc2.stop(now + duration + 0.15);
+      
+      await new Promise(r => setTimeout(r, duration * 1000));
+    } catch(e) { console.log("siren error", e); }
+  }
+  
+  async function playBombSound() {
+    const ok = await ensureAudioContext();
+    if (!ok) return;
+    try {
+      const now = audioCtx.currentTime;
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.6;
+      gainNode.connect(audioCtx.destination);
+      
+      // Diepe "BOOM" met noise-achtige oscillator
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sawtooth';
+      osc.frequency.value = 80;
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = 'triangle';
+      osc2.frequency.value = 55;
+      
+      osc.connect(gainNode);
+      osc2.connect(gainNode);
+      
+      osc.start();
+      osc2.start();
+      
+      // Frequency drop voor explosie effect
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
+      osc2.frequency.exponentialRampToValueAtTime(30, now + 0.3);
+      
+      gainNode.gain.setValueAtTime(0.6, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+      
+      osc.stop(now + 0.8);
+      osc2.stop(now + 0.8);
+      
+      await new Promise(r => setTimeout(r, 900));
+    } catch(e) { console.log("bomb sound error", e); }
+  }
+  
+  // ========== SPEL LOGICA ==========
+  const SYMBOLS = ["🍒", "🍋", "🍉", "⭐", "💎", "7️⃣", "🃏"]; // Joker toegevoegd!
+  let score = 0, debt = 0;
+  
+  const scoreEl = document.getElementById('score');
+  const debtEl = document.getElementById('debt');
+  const resultEl = document.getElementById('result');
+  const betSelect = document.getElementById('bet');
+  const spinBtn = document.getElementById('spinBtn');
+  const addBtn = document.getElementById('addBtn');
+  const debtBtn = document.getElementById('debtBtn');
+  
+  const p4Row = document.getElementById('p4');
+  const p3Row = document.getElementById('p3');
+  const p2Row = document.getElementById('p2');
+  
+  const strips = {
+    r1: document.getElementById('r1'),
+    r2: document.getElementById('r2'),
+    r3: document.getElementById('r3'),
+    r4: document.getElementById('r4')
+  };
+  
+  // Mystery overlay (kersen)
+  const mysteryOverlay = document.getElementById('mysteryOverlay');
+  const mysteryPrizeSpan = document.getElementById('mysteryPrizeAmount');
+  const mysteryTitle = document.getElementById('mysteryTitle');
+  const mysteryCherryIcon = document.getElementById('mysteryCherryIcon');
+  const closeMysteryBtn = document.getElementById('closeMysteryBtn');
+  
+  // Jackpot overlay (goud)
+  const jackpotOverlay = document.getElementById('jackpotOverlay');
+  const jackpotPrizeSpan = document.getElementById('jackpotPrizeAmount');
+  const closeJackpotBtn = document.getElementById('closeJackpotBtn');
+  
+  async function slowBlinkOverlay(overlayElement, times = 3) {
+    for (let i = 0; i < times; i++) {
+      overlayElement.classList.add('blinking');
+      await new Promise(r => setTimeout(r, 1000));
+      overlayElement.classList.remove('blinking');
+      await new Promise(r => setTimeout(r, 500));
+    }
+  }
+  
+  async function animateMysteryNumber(element, targetValue, duration = 700) {
+    element.innerText = "???";
+    element.classList.add('glitch-effect');
+    const steps = 18;
+    const stepTime = duration / steps;
+    for (let i = 0; i <= steps; i++) {
+      const fakeVal = Math.floor(Math.random() * (targetValue + 25));
+      element.innerText = `+${fakeVal}`;
+      await new Promise(r => setTimeout(r, stepTime));
+    }
+    element.innerText = `+${targetValue}`;
+    element.classList.remove('glitch-effect');
+    element.style.textShadow = "0 0 8px gold";
+    setTimeout(() => element.style.textShadow = "", 300);
+  }
+  
+  async function showMysteryPrize(prize, isDoubleCherry = false) {
+    if (isDoubleCherry) {
+      mysteryTitle.innerHTML = "DOUBLE CHERRY MYSTERY";
+      mysteryCherryIcon.innerHTML = "🍒🍒";
+      mysteryCherryIcon.style.animation = "pulseCherry 0.6s ease";
+    } else {
+      mysteryTitle.innerHTML = "CHERRY MYSTERY";
+      mysteryCherryIcon.innerHTML = "🍒";
+      mysteryCherryIcon.style.animation = "pulseCherry 0.5s ease";
+    }
+    
+    mysteryOverlay.classList.add('show');
+    await slowBlinkOverlay(mysteryOverlay, 3);
+    
+    await playSirenSound();
+    await animateMysteryNumber(mysteryPrizeSpan, prize, 650);
+    if (prize > 0) await playWinSound();
+  }
+  
+  async function showJackpot() {
+    jackpotPrizeSpan.innerText = "+1500";
+    jackpotOverlay.classList.add('show');
+    await slowBlinkOverlay(jackpotOverlay, 2);
+    await playBombSound();
+    // extra effect: laat jackpot teller dansen
+    jackpotPrizeSpan.style.animation = "jackpotBounce 0.5s ease";
+    setTimeout(() => { if(jackpotPrizeSpan) jackpotPrizeSpan.style.animation = ""; }, 500);
+    await playWinSound(); // extra winstgeluid voor de lol
+  }
+  
+  function hideMystery() { 
+    mysteryOverlay.classList.remove('show');
+    mysteryOverlay.classList.remove('blinking');
+    mysteryPrizeSpan.innerText = "+?";
+  }
+  function hideJackpot() { 
+    jackpotOverlay.classList.remove('show');
+    jackpotOverlay.classList.remove('blinking');
+  }
+  closeMysteryBtn.addEventListener('click', hideMystery);
+  closeJackpotBtn.addEventListener('click', hideJackpot);
+  
+  function loadGameData() {
+    const savedScore = localStorage.getItem('insane_slot_joker');
+    const savedDebt = localStorage.getItem('insane_slot_joker_debt');
+    score = (savedScore !== null) ? parseInt(savedScore, 10) : 150;
+    debt = (savedDebt !== null) ? parseInt(savedDebt, 10) : 0;
+    if (isNaN(score)) score = 150;
+    if (isNaN(debt)) debt = 0;
+    updateUI();
+  }
+  
+  function saveGameData() {
+    localStorage.setItem('insane_slot_joker', score);
+    localStorage.setItem('insane_slot_joker_debt', debt);
+  }
+  
+  function updateUI() {
+    scoreEl.innerText = Math.floor(score);
+    debtEl.innerText = Math.floor(debt);
+    saveGameData();
+  }
+  
+  function buildReel(stripElement) {
+    if (!stripElement) return;
+    stripElement.innerHTML = '';
+    for (let i = 0; i < 30; i++) {
+      const symDiv = document.createElement('div');
+      symDiv.className = 'symbol';
+      symDiv.innerText = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
+      stripElement.appendChild(symDiv);
+    }
+  }
+  
+  function initAllReels() {
+    buildReel(strips.r1);
+    buildReel(strips.r2);
+    buildReel(strips.r3);
+    buildReel(strips.r4);
+  }
+  
+  function clearPaytableHighlights() {
+    p4Row.classList.remove('active');
+    p3Row.classList.remove('active');
+    p2Row.classList.remove('active');
+  }
+  
+  function calculateWinFromLeft(symbolsArray, betAmount) {
+    if (!symbolsArray.length) return { totalWin: 0, winLength: 0 };
+    const first = symbolsArray[0];
+    let consecutive = 1;
+    for (let i = 1; i < symbolsArray.length; i++) {
+      if (symbolsArray[i] === first) consecutive++;
+      else break;
+    }
+    let totalWin = 0, winLength = 0;
+    if (consecutive === 4) { totalWin = betAmount * 12; winLength = 4; }
+    else if (consecutive === 3) { totalWin = betAmount * 10; winLength = 3; }
+    else if (consecutive === 2) { totalWin = betAmount * 5; winLength = 2; }
+    return { totalWin, winLength, consecutive, symbol: first };
+  }
+  
+  function checkJokerJackpot(symbolsArray) {
+    if (symbolsArray.length >= 1 && symbolsArray[0] === "🃏") {
+      return true;
+    }
+    return false;
+  }
+  
+  function checkSingleCherryMystery(symbolsArray) {
+    if (symbolsArray.length >= 1 && symbolsArray[0] === "🍒") {
+      if (symbolsArray.length >= 2 && symbolsArray[1] === "🍒") return null;
+      return Math.floor(Math.random() * 51);
+    }
+    return null;
+  }
+  
+  function checkDoubleCherryMystery(symbolsArray) {
+    if (symbolsArray.length >= 2 && symbolsArray[0] === "🍒" && symbolsArray[1] === "🍒") {
+      return Math.floor(Math.random() * 101);
+    }
+    return null;
+  }
+  
+  function highlightByLength(len) {
+    if (len === 4) p4Row.classList.add('active');
+    else if (len === 3) p3Row.classList.add('active');
+    else if (len === 2) p2Row.classList.add('active');
+  }
+  
+  function animateWinSymbols(elements, length) {
+    for (let i = 0; i < length; i++) {
+      if (elements[i]) {
+        elements[i].classList.add('win');
+        setTimeout(() => {
+          if (elements[i]) elements[i].classList.remove('win');
+        }, 600);
+      }
+    }
+  }
+  
+  let isSpinning = false;
+  
+  async function spin() {
+    await ensureAudioContext();
+    
+    if (isSpinning) {
+      resultEl.innerHTML = "⏳ Even geduld...";
+      return;
+    }
+    
+    const bet = parseInt(betSelect.value, 10);
     if (score < bet) {
-        resultEl.textContent = "❌ Niet genoeg saldo!";
-        resultEl.className = "result lose";
-        return;
+      resultEl.innerHTML = "❌ Niet genoeg punten! Gebruik '+100' ❌";
+      return;
     }
-
-    spinning = true;
+    
     score -= bet;
     updateUI();
-    resultEl.textContent = "";
-
-    const finalResults = [];
-
-    reels.forEach((track, index) => {
-        // Reset track voor nieuwe spin
-        track.style.transition = "none";
-        track.style.transform = "translateY(0px)";
-
-        // Vul track opnieuw met random symbolen (zodat het elke keer rolt)
-        track.innerHTML = "";
-        for (let i = 0; i < 35; i++) {
-            const sym = document.createElement("div");
-            sym.className = "symbol";
-            sym.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            track.appendChild(sym);
-        }
-
-        // Start snelle spin
-        let position = 0;
-        const speed = 45 + index * 6;
-
-        const spinInterval = setInterval(() => {
-            position += speed;
-            track.style.transition = "none";
-            track.style.transform = `translateY(-${position}px)`;
-        }, 16);
-
-        // Stop de reel
+    clearPaytableHighlights();
+    isSpinning = true;
+    resultEl.innerHTML = "🎡 DRAAIEN... 🎡";
+    
+    startSpinSound();
+    
+    const reels = [strips.r1, strips.r2, strips.r3, strips.r4];
+    const finalSymbols = [null, null, null, null];
+    const promises = [];
+    
+    for (let i = 0; i < reels.length; i++) {
+      reels[i].style.transition = 'none';
+      reels[i].style.transform = 'translateY(0px)';
+      void reels[i].offsetHeight;
+    }
+    
+    for (let i = 0; i < reels.length; i++) buildReel(reels[i]);
+    
+    for (let i = 0; i < reels.length; i++) {
+      const reel = reels[i];
+      const first = reel.children[0];
+      if (!first) continue;
+      const symH = first.offsetHeight;
+      const stopIdx = Math.floor(Math.random() * 18) + 6;
+      const offset = stopIdx * symH;
+      const duration = 600 + i * 100;
+      
+      setTimeout(() => {
+        reel.style.transition = `transform ${duration}ms cubic-bezier(0.2, 0.9, 0.3, 1.1)`;
+        reel.style.transform = `translateY(-${offset}px)`;
+      }, i * 50);
+      
+      const promise = new Promise((resolve) => {
+        const handler = (e) => {
+          if (e.target === reel) {
+            reel.removeEventListener('transitionend', handler);
+            const match = reel.style.transform.match(/translateY\(-([\d.]+)px\)/);
+            if (match) {
+              const off = parseFloat(match[1]);
+              const visible = Math.round(off / symH);
+              finalSymbols[i] = reel.children[visible] || reel.children[0];
+            } else {
+              finalSymbols[i] = reel.children[stopIdx] || reel.children[0];
+            }
+            resolve();
+          }
+        };
+        reel.addEventListener('transitionend', handler);
         setTimeout(() => {
-            clearInterval(spinInterval);
-
-            const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
-            finalResults.push(finalSymbol);
-
-            const finalPos = Math.floor(Math.random() * 12) * 70 + 70;
-
-            track.style.transition = "transform 0.85s cubic-bezier(0.23, 1, 0.32, 1)";
-            track.style.transform = `translateY(-${finalPos}px)`;
-
-            setTimeout(() => {
-                // Toon alleen de 3 middelste symbolen als resultaat
-                track.innerHTML = "";
-                for (let j = 0; j < 3; j++) {
-                    const sym = document.createElement("div");
-                    sym.className = "symbol";
-                    sym.textContent = finalSymbol;
-                    track.appendChild(sym);
-                }
-                track.style.transition = "none";
-                track.style.transform = "translateY(0px)";
-
-                if (finalResults.length === 5) {
-                    finishSpin(finalResults, bet);
-                }
-            }, 900);
-
-        }, 700 + index * 380);
-    });
-}
-
-function finishSpin(results, bet) {
-    const win = calculateWin(results, bet);
-    lastWin = win;
-
-    if (win > 0) {
-        score += win;
-        resultEl.innerHTML = `🎉 WIN! +${win} credits`;
-        resultEl.className = "result win";
-    } else {
-        resultEl.innerHTML = "😢 Geen winst...";
-        resultEl.className = "result lose";
+          if (!finalSymbols[i]) {
+            finalSymbols[i] = reel.children[stopIdx] || reel.children[0];
+            resolve();
+          }
+        }, duration + 80);
+      });
+      promises.push(promise);
     }
-
-    spinning = false;
+    
+    await Promise.all(promises);
+    stopSpinSound();
+    
+    const finalStrings = finalSymbols.map(el => el ? el.innerText : "🍒");
+    
+    // 1) JACKPOT CHECK (Joker op rol 1)
+    const jackpotTriggered = checkJokerJackpot(finalStrings);
+    let jackpotAwarded = false;
+    if (jackpotTriggered) {
+      score += 1500;
+      jackpotAwarded = true;
+      resultEl.innerHTML = `<span class="bigwin">💣 JACKPOT! 1500 PUNTEN! 🃏💣</span>`;
+    }
+    
+    // 2) Normale winstberekening
+    const { totalWin, winLength, symbol } = calculateWinFromLeft(finalStrings, bet);
+    
+    // 3) Mystery checks (alleen als geen jackpot, anders overslaan? Nee, mag ook naast elkaar)
+    let mysteryAmount = null;
+    let mysteryType = null;
+    if (!jackpotTriggered) { // voorkom dubbele overlays? Maar mag ook, we laten beide kunnen
+      const doubleMystery = checkDoubleCherryMystery(finalStrings);
+      if (doubleMystery !== null) {
+        mysteryAmount = doubleMystery;
+        mysteryType = 'double';
+      } else {
+        const singleMystery = checkSingleCherryMystery(finalStrings);
+        if (singleMystery !== null) {
+          mysteryAmount = singleMystery;
+          mysteryType = 'single';
+        }
+      }
+      if (mysteryAmount !== null && mysteryAmount > 0) score += mysteryAmount;
+    }
+    
+    if (totalWin > 0 && !jackpotTriggered) {
+      await playWinSound();
+      score += totalWin;
+      if (debt > 0) {
+        let reduction = Math.min(Math.floor(totalWin * 0.3), 50);
+        if (reduction > 0) debt = Math.max(0, debt - reduction);
+      }
+      let multiplier = winLength === 4 ? 12 : (winLength === 3 ? 10 : 5);
+      let winMsg = `${symbol} x${winLength} (x${multiplier}) +${totalWin}`;
+      if (!resultEl.innerHTML.includes("JACKPOT")) {
+        if (totalWin >= bet * 6) {
+          resultEl.innerHTML = `<span class="bigwin">🔥 MEGA WIN! ${winMsg} 🔥</span>`;
+        } else {
+          resultEl.innerHTML = `🏆 WIN! ${winMsg} 🏆`;
+        }
+      }
+      highlightByLength(winLength);
+      animateWinSymbols(finalSymbols, winLength);
+    } else if (mysteryAmount !== null && !jackpotTriggered) {
+      if (mysteryAmount > 0) resultEl.innerHTML = `🍒 MYSTERY! +${mysteryAmount} punten! 🍒`;
+      else resultEl.innerHTML = `🍒 MYSTERY... 0 punten 🍒`;
+    } else if (!jackpotTriggered && totalWin === 0 && mysteryAmount === null) {
+      resultEl.innerHTML = "❌ Geen combo vanaf links! ❌";
+    }
+    
+    // Toon overlays (eerst jackpot, dan mystery als die er is)
+    if (jackpotTriggered) {
+      await showJackpot();
+    }
+    if (mysteryAmount !== null && !jackpotTriggered) {
+      await showMysteryPrize(mysteryAmount, mysteryType === 'double');
+    }
+    
     updateUI();
-}
-
-function calculateWin(results, bet) {
-    const counts = {};
-    results.forEach(s => counts[s] = (counts[s] || 0) + 1);
-    const max = Math.max(...Object.values(counts));
-
-    if (max === 5) return bet * 25;
-    if (max === 4) return bet * 8;
-    if (max === 3) return bet * 3;
-    return 0;
-}
-
-function cashOut() {
-    if (lastWin > 0) {
-        bank += lastWin;
-        lastWin = 0;
-        resultEl.textContent = "💸 Winst ingelost!";
-        updateUI();
-    }
-}
-
-function toggleAutoSpin() {
-    if (autoInterval) {
-        clearInterval(autoInterval);
-        autoInterval = null;
-        autoBtn.textContent = "⚡ AUTO SPIN";
-    } else {
-        autoBtn.textContent = "⛔ STOP AUTO";
-        autoInterval = setInterval(() => {
-            if (!spinning && score >= parseInt(betEl.value)) spin();
-            else if (score < parseInt(betEl.value)) toggleAutoSpin();
-        }, 2300);
-    }
-}
-
-function addCredits() {
-    score += 200;
+    isSpinning = false;
+  }
+  
+  function addCredits() {
+    score += 100;
+    debt += 100;
     updateUI();
-}
-
-function updateUI() {
-    scoreEl.textContent = score;
-    bankEl.textContent = bank;
-}
-
-// Start spel
-renderSlots();
-updateUI();
+    resultEl.innerHTML = "💎 +100 credits | Schuld +100 💎";
+    clearPaytableHighlights();
+  }
+  
+  function payDebt() {
+    if (debt <= 0) { resultEl.innerHTML = "✅ Geen schuld! ✅"; return; }
+    if (score < 50) { resultEl.innerHTML = "💢 50 punten nodig om schuld te betalen 💢"; return; }
+    score -= 50;
+    let pay = Math.min(50, debt);
+    debt -= pay;
+    if (debt < 0) debt = 0;
+    updateUI();
+    resultEl.innerHTML = `💳 Schuld -${pay} | Resterend: ${debt}`;
+    clearPaytableHighlights();
+  }
+  
+  function bindEvents() {
+    spinBtn.addEventListener('click', spin);
+    addBtn.addEventListener('click', addCredits);
+    debtBtn.addEventListener('click', payDebt);
+  }
+  
+  async function init() {
+    loadGameData();
+    initAllReels();
+    bindEvents();
+    clearPaytableHighlights();
+    if (debt > 0) resultEl.innerHTML = `⚠️ Schuld: ${debt} - Joker op rol1 = 1500 JACKPOT! ⚠️`;
+    else resultEl.innerHTML = "🎰 JOKER op rol 1 = JACKPOT 1500! + BOMGELUID + GOUDEN OVERLAY! 🎰";
+  }
+  
+  init();
 </script>
-
 </body>
 </html>

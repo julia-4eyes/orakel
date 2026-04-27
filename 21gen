@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>21gen - Kaartspel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a472a 0%, #2d5a3f 50%, #1a472a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 8px;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+
+        .game-title {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .balance-display {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+            border: 1.5px solid #ffd700;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .balance-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .balance-label {
+            color: white;
+            font-size: 0.8em;
+        }
+
+        .balance-amount {
+            color: #ffd700;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Resultaat Overlay */
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .result-overlay.hidden {
+            display: none;
+        }
+
+        .result-content {
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            animation: popIn 0.3s ease-out;
+        }
+
+        .result-content.win {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.9) 0%, rgba(45, 90, 63, 0.9) 100%);
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .result-content.loss {
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.9) 0%, rgba(139, 0, 0, 0.9) 100%);
+            border: 3px solid #ff6b6b;
+            box-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+        }
+
+        .result-content.push {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.9) 0%, rgba(0, 86, 179, 0.9) 100%);
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .result-emoji {
+            font-size: 4em;
+            margin-bottom: 10px;
+            animation: bounce 0.5s ease-out;
+        }
+
+        .result-title {
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-score {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .result-points {
+            color: white;
+            font-size: 1.8em;
+            font-weight: bold;
+            animation: pulse 0.5s ease-in-out infinite;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Inzet Overlay */
+        .betting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(3px);
+        }
+
+        .betting-overlay.hidden {
+            display: none;
+        }
+
+        .betting-modal {
+            background: linear-gradient(135deg, rgba(26, 71, 42, 0.98) 0%, rgba(45, 90, 63, 0.98) 100%);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            max-width: 340px;
+            width: 95%;
+        }
+
+        .betting-title {
+            color: #ffd700;
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .betting-balance {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1.5px solid #ffd700;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .betting-balance-label {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .betting-balance-amount {
+            color: #ffd700;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .betting-info {
+            color: white;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+
+        .bet-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .bet-btn {
+            background: #ffd700;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bet-btn:hover:not(:disabled) {
+            background: #ffed4a;
+            transform: scale(1.1);
+        }
+
+        .bet-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .bet-amount-display {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 15px;
+            min-width: 100px;
+        }
+
+        .bet-amount {
+            color: #ffd700;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .bet-label {
+            color: white;
+            font-size: 0.8em;
+            margin-top: 2px;
+        }
+
+        .bet-after-info {
+            color: #aaa;
+            font-size: 0.8em;
+            margin-top: 8px;
+        }
+
+        .bet-after-amount {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .place-bet-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .place-bet-btn:hover:not(:disabled) {
+            background: #34d058;
+            transform: translateY(-1px);
+        }
+
+        .place-bet-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .warning-message {
+            color: #ff6b6b;
+            font-size: 0.8em;
+            margin-top: 10px;
+            min-height: 18px;
+        }
+
+        .quick-bet-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-bet-btn {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-bet-btn:hover {
+            background: rgba(255, 215, 0, 0.4);
+        }
+
+        .quick-bet-btn.active-quick-bet {
+            background: rgba(255, 215, 0, 0.5);
+            border-color: #fff;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 8px 0;
+            gap: 8px;
+        }
+
+        .player-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            flex: 1;
+            text-align: center;
+            border: 1.5px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .player-section.active {
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .player-name {
+            color: #ffd700;
+            font-size: 1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            min-height: 80px;
+            margin: 8px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 6px;
+            width: 45px;
+            height: 65px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .card.new-card {
+            animation: cardFlip 0.3s ease-out;
+        }
+
+        .card.reveal-card {
+            animation: cardReveal 0.4s ease-out;
+        }
+
+        .card:active {
+            transform: translateY(-2px);
+        }
+
+        .card.red {
+            color: #dc3545;
+        }
+
+        .card.black {
+            color: #000000;
+        }
+
+        .card-suit {
+            font-size: 1em;
+        }
+
+        .card-value {
+            font-size: 0.8em;
+        }
+
+        @keyframes cardFlip {
+            0% { transform: rotateY(0deg); opacity: 0; }
+            50% { transform: rotateY(90deg); opacity: 0.5; }
+            100% { transform: rotateY(0deg); opacity: 1; }
+        }
+
+        @keyframes cardReveal {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
+        .score {
+            color: white;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .score-number {
+            color: #ffd700;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 0.85em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-hit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-stand {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-new-game {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-reset {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .message {
+            text-align: center;
+            color: #ffd700;
+            font-size: 1em;
+            margin-top: 8px;
+            font-weight: bold;
+            min-height: 25px;
+            padding: 5px;
+        }
+
+        .hidden-card {
+            background: linear-gradient(45deg, #dc3545 25%, transparent 25%, transparent 75%, #dc3545 75%),
+                        linear-gradient(45deg, #dc3545 25%, transparent 25%, transparent 75%, #dc3545 75%);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+            background-color: #8b0000;
+            color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <!-- Resultaat Overlay -->
+    <div class="result-overlay hidden" id="result-overlay">
+        <div class="result-content" id="result-content">
+            <div class="result-emoji" id="result-emoji"></div>
+            <div class="result-title" id="result-title"></div>
+            <div class="result-score" id="result-score"></div>
+            <div class="result-points" id="result-points"></div>
+        </div>
+    </div>
+
+    <!-- Inzet Overlay -->
+    <div class="betting-overlay" id="betting-overlay">
+        <div class="betting-modal">
+            <div class="betting-title">🎯 Plaats je Inzet</div>
+            
+            <div class="betting-balance">
+                <div class="betting-balance-label">💰 Beschikbare Punten</div>
+                <div class="betting-balance-amount" id="betting-balance-display">20</div>
+            </div>
+            
+            <div class="betting-info">
+                Kies hoeveel punten je wilt inzetten:
+            </div>
+            
+            <div class="bet-controls">
+                <button class="bet-btn" onclick="changeBet(-1)" id="decrease-bet">-</button>
+                <div class="bet-amount-display">
+                    <div class="bet-amount" id="current-bet">1</div>
+                    <div class="bet-label">INZET</div>
+                </div>
+                <button class="bet-btn" onclick="changeBet(1)" id="increase-bet">+</button>
+            </div>
+            
+            <div class="bet-after-info">
+                Na inzet: nog <span class="bet-after-amount" id="bet-after-balance">19</span> punten over
+            </div>
+            
+            <div class="quick-bet-buttons">
+                <button class="quick-bet-btn" onclick="setBet(1)">1</button>
+                <button class="quick-bet-btn" onclick="setBet(5)">5</button>
+                <button class="quick-bet-btn" onclick="setBet(10)">10</button>
+                <button class="quick-bet-btn" onclick="setBet(Math.floor(balance/2))">½</button>
+                <button class="quick-bet-btn" onclick="setBet(balance)">All-in</button>
+            </div>
+            
+            <div style="margin-top: 25px;">
+                <button class="place-bet-btn" onclick="placeBet()" id="place-bet-btn">
+                    ✅ Inzetten & Spelen
+                </button>
+            </div>
+            
+            <div class="warning-message" id="bet-warning"></div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <h1 class="game-title">🎴 21gen 🎴</h1>
+        
+        <div class="balance-display">
+            <div class="balance-item">
+                <span class="balance-label">💰</span>
+                <span class="balance-amount" id="balance">20</span>
+            </div>
+            <div class="balance-item">
+                <span class="balance-label">🎯 Inzet:</span>
+                <span class="balance-amount" id="current-bet-display">-</span>
+            </div>
+        </div>
+        
+        <div class="score-board">
+            <div class="player-section" id="dealer-section">
+                <div class="player-name">🤖 Dealer</div>
+                <div class="cards-container" id="dealer-cards"></div>
+                <div class="score">Score: <span class="score-number" id="dealer-score">0</span></div>
+            </div>
+            
+            <div class="player-section" id="player-section">
+                <div class="player-name">👤 Jij</div>
+                <div class="cards-container" id="player-cards"></div>
+                <div class="score">Score: <span class="score-number" id="player-score">0</span></div>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <div class="controls">
+            <button class="btn-hit" id="hit-btn" onclick="hit()" disabled>Pak Kaart</button>
+            <button class="btn-stand" id="stand-btn" onclick="stand()" disabled>Stop</button>
+            <button class="btn-new-game" id="new-game-btn" onclick="showBettingOverlay()">Volgende</button>
+            <button class="btn-reset" onclick="resetGame()">🔄 Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let deck = [];
+        let playerCards = [];
+        let dealerCards = [];
+        let gameOver = false;
+        let dealerHiddenCard = null;
+        let balance = 20;
+        let currentBet = 1;
+        let resultTimeout = null;
+        let isDealerDrawing = false;
+        
+        // Houd bij welke kaarten al gerenderd zijn
+        let renderedPlayerCards = [];
+        let renderedDealerCards = [];
+
+        // Audio context voor geluidseffecten
+        let audioContext = null;
+
+        function initAudio() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(frequency, duration, type = 'sine', volume = 0.3) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playCardSound() {
+            initAudio();
+            playSound(800, 0.1, 'sine', 0.2);
+            setTimeout(() => playSound(1000, 0.1, 'sine', 0.2), 50);
+        }
+
+        function playWinSound() {
+            initAudio();
+            playSound(523, 0.2, 'sine', 0.3);
+            setTimeout(() => playSound(659, 0.2, 'sine', 0.3), 200);
+            setTimeout(() => playSound(784, 0.3, 'sine', 0.3), 400);
+            setTimeout(() => playSound(1047, 0.4, 'sine', 0.4), 600);
+        }
+
+        function playLossSound() {
+            initAudio();
+            playSound(400, 0.3, 'sawtooth', 0.2);
+            setTimeout(() => playSound(300, 0.3, 'sawtooth', 0.2), 200);
+            setTimeout(() => playSound(200, 0.5, 'sawtooth', 0.3), 400);
+        }
+
+        function playPushSound() {
+            initAudio();
+            playSound(440, 0.2, 'triangle', 0.2);
+            setTimeout(() => playSound(440, 0.2, 'triangle', 0.2), 200);
+        }
+
+        function showResultOverlay(result, playerScore, dealerScore) {
+            const overlay = document.getElementById('result-overlay');
+            const content = document.getElementById('result-content');
+            const emoji = document.getElementById('result-emoji');
+            const title = document.getElementById('result-title');
+            const score = document.getElementById('result-score');
+            const points = document.getElementById('result-points');
+
+            // Reset classes
+            content.className = 'result-content';
+
+            if (result === 'win') {
+                content.classList.add('win');
+                emoji.textContent = '🎉';
+                title.textContent = 'GEWONNEN!';
+                points.textContent = '+' + currentBet + ' punten';
+                points.style.color = '#ffd700';
+                playWinSound();
+            } else if (result === 'loss') {
+                content.classList.add('loss');
+                emoji.textContent = '😔';
+                title.textContent = 'VERLOREN';
+                points.textContent = '-' + currentBet + ' punten';
+                points.style.color = '#ff6b6b';
+                playLossSound();
+            } else {
+                content.classList.add('push');
+                emoji.textContent = '🤝';
+                title.textContent = 'GELIJKSPEL';
+                points.textContent = 'Inzet behouden';
+                points.style.color = '#ffffff';
+                playPushSound();
+            }
+
+            score.textContent = `Jij: ${playerScore} - Dealer: ${dealerScore}`;
+            
+            overlay.classList.remove('hidden');
+
+            // Automatisch verbergen na 2 seconden en toon inzet overlay
+            if (resultTimeout) clearTimeout(resultTimeout);
+            resultTimeout = setTimeout(() => {
+                overlay.classList.add('hidden');
+                if (balance > 0) {
+                    showBettingOverlay();
+                }
+            }, 2000);
+        }
+
+        function updateBalanceDisplay() {
+            document.getElementById('balance').textContent = balance;
+            document.getElementById('current-bet-display').textContent = 
+                document.getElementById('betting-overlay').classList.contains('hidden') ? currentBet : '-';
+            updateBettingOverlayDisplay();
+            updateBetButtons();
+        }
+
+        function updateBettingOverlayDisplay() {
+            document.getElementById('betting-balance-display').textContent = balance;
+            document.getElementById('bet-after-balance').textContent = balance - currentBet;
+        }
+
+        function updateBetButtons() {
+            const decreaseBtn = document.getElementById('decrease-bet');
+            const increaseBtn = document.getElementById('increase-bet');
+            const placeBetBtn = document.getElementById('place-bet-btn');
+            
+            if (decreaseBtn) decreaseBtn.disabled = currentBet <= 1;
+            if (increaseBtn) increaseBtn.disabled = currentBet >= balance;
+            if (placeBetBtn) placeBetBtn.disabled = balance <= 0;
+            
+            document.getElementById('current-bet').textContent = currentBet;
+            document.getElementById('bet-warning').textContent = '';
+            
+            document.getElementById('bet-after-balance').textContent = balance - currentBet;
+            
+            document.querySelectorAll('.quick-bet-btn').forEach(btn => {
+                btn.classList.remove('active-quick-bet');
+            });
+        }
+
+        function showBettingOverlay() {
+            if (balance <= 0) {
+                document.getElementById('message').textContent = 'Geen punten meer! Reset het spel.';
+                return;
+            }
+            
+            updateBettingOverlayDisplay();
+            document.getElementById('betting-overlay').classList.remove('hidden');
+            updateBetButtons();
+        }
+
+        function hideBettingOverlay() {
+            document.getElementById('betting-overlay').classList.add('hidden');
+        }
+
+        function changeBet(amount) {
+            const newBet = currentBet + amount;
+            if (newBet >= 1 && newBet <= balance) {
+                currentBet = newBet;
+                updateBetButtons();
+            }
+        }
+
+        function setBet(amount) {
+            if (amount >= 1 && amount <= balance) {
+                currentBet = amount;
+                updateBetButtons();
+                
+                document.querySelectorAll('.quick-bet-btn').forEach(btn => {
+                    btn.classList.remove('active-quick-bet');
+                    const betValue = parseInt(btn.textContent);
+                    if (betValue === amount) {
+                        btn.classList.add('active-quick-bet');
+                    } else if (btn.textContent === '½' && amount === Math.floor(balance/2)) {
+                        btn.classList.add('active-quick-bet');
+                    } else if (btn.textContent === 'All-in' && amount === balance) {
+                        btn.classList.add('active-quick-bet');
+                    }
+                });
+            }
+        }
+
+        function placeBet() {
+            if (balance <= 0) {
+                document.getElementById('bet-warning').textContent = 'Geen punten meer! Reset het spel.';
+                return;
+            }
+            
+            if (currentBet > balance) {
+                document.getElementById('bet-warning').textContent = 'Niet genoeg punten!';
+                return;
+            }
+            
+            hideBettingOverlay();
+            document.getElementById('hit-btn').disabled = false;
+            document.getElementById('stand-btn').disabled = false;
+            document.getElementById('new-game-btn').disabled = true;
+            document.getElementById('message').textContent = `Inzet: ${currentBet} punt(en). Succes! 🍀`;
+            
+            updateBalanceDisplay();
+            createDeck();
+            dealInitialCards();
+        }
+
+        function createDeck() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            deck = [];
+            
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value });
+                }
+            }
+            shuffleDeck();
+        }
+
+        function shuffleDeck() {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function getCardValue(card) {
+            if (card.value === 'A') return 11;
+            if (['K', 'Q', 'J'].includes(card.value)) return 10;
+            return parseInt(card.value);
+        }
+
+        function calculateScore(cards) {
+            let score = 0;
+            let aces = 0;
+            
+            for (let card of cards) {
+                score += getCardValue(card);
+                if (card.value === 'A') aces++;
+            }
+            
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            
+            return score;
+        }
+
+        function createCardElement(card, hidden = false, isNew = false, isReveal = false) {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            
+            if (hidden) {
+                cardDiv.classList.add('hidden-card');
+            } else {
+                cardDiv.classList.add(['♥', '♦'].includes(card.suit) ? 'red' : 'black');
+                cardDiv.innerHTML = `
+                    <div class="card-value">${card.value}</div>
+                    <div class="card-suit">${card.suit}</div>
+                `;
+                
+                // Alleen animeren als het een nieuwe kaart is of een onthulde kaart
+                if (isNew) {
+                    cardDiv.classList.add('new-card');
+                } else if (isReveal) {
+                    cardDiv.classList.add('reveal-card');
+                }
+            }
+            
+            return cardDiv;
+        }
+
+        function updateDisplay(options = {}) {
+            const { newPlayerCard = false, newDealerCard = false, revealDealerCard = false, fullRender = false } = options;
+            
+            const dealerCardsContainer = document.getElementById('dealer-cards');
+            const playerCardsContainer = document.getElementById('player-cards');
+            
+            // Bij volledige render of eerste keer alles renderen
+            if (fullRender || dealerCardsContainer.children.length === 0) {
+                dealerCardsContainer.innerHTML = '';
+                playerCardsContainer.innerHTML = '';
+                
+                // Reset bijgehouden kaarten
+                renderedPlayerCards = [];
+                renderedDealerCards = [];
+                
+                // Dealer kaarten renderen
+                dealerCards.forEach((card, index) => {
+                    const isHidden = index === 0 && dealerHiddenCard && !gameOver;
+                    renderedDealerCards.push({ card, hidden: isHidden });
+                    dealerCardsContainer.appendChild(createCardElement(card, isHidden, true));
+                    if (!isHidden) playCardSound();
+                });
+                
+                // Speler kaarten renderen
+                playerCards.forEach((card, index) => {
+                    renderedPlayerCards.push({ card, hidden: false });
+                    playerCardsContainer.appendChild(createCardElement(card, false, true));
+                    playCardSound();
+                });
+            } else {
+                // Alleen nieuwe of veranderde kaarten updaten
+                
+                // Check voor nieuwe speler kaart
+                if (newPlayerCard && playerCards.length > renderedPlayerCards.length) {
+                    const newCard = playerCards[playerCards.length - 1];
+                    renderedPlayerCards.push({ card: newCard, hidden: false });
+                    const cardElement = createCardElement(newCard, false, true);
+                    playerCardsContainer.appendChild(cardElement);
+                    playCardSound();
+                }
+                
+                // Check voor reveal dealer kaart
+                if (revealDealerCard && renderedDealerCards.length > 0 && renderedDealerCards[0].hidden) {
+                    // Update de verborgen kaart naar zichtbaar
+                    renderedDealerCards[0].hidden = false;
+                    
+                    // Vervang alleen de eerste kaart in de container
+                    const firstCard = dealerCardsContainer.children[0];
+                    if (firstCard) {
+                        const newCardElement = createCardElement(dealerCards[0], false, false, true);
+                        dealerCardsContainer.replaceChild(newCardElement, firstCard);
+                        playCardSound();
+                    }
+                }
+                
+                // Check voor nieuwe dealer kaart
+                if (newDealerCard && dealerCards.length > renderedDealerCards.length) {
+                    const newCard = dealerCards[dealerCards.length - 1];
+                    renderedDealerCards.push({ card: newCard, hidden: false });
+                    const cardElement = createCardElement(newCard, false, true);
+                    dealerCardsContainer.appendChild(cardElement);
+                    playCardSound();
+                }
+            }
+            
+            // Update scores
+            document.getElementById('player-score').textContent = calculateScore(playerCards);
+            
+            if (gameOver || !dealerHiddenCard) {
+                document.getElementById('dealer-score').textContent = calculateScore(dealerCards);
+            } else {
+                const visibleDealerCards = dealerCards.slice(1);
+                document.getElementById('dealer-score').textContent = 
+                    dealerCards.length > 0 ? calculateScore(visibleDealerCards) : 0;
+            }
+        }
+
+        function dealInitialCards() {
+            playerCards = [deck.pop(), deck.pop()];
+            dealerCards = [deck.pop(), deck.pop()];
+            dealerHiddenCard = true;
+            gameOver = false;
+            
+            updateDisplay({ fullRender: true });
+            
+            if (calculateScore(playerCards) === 21) {
+                balance += currentBet;
+                updateBalanceDisplay();
+                const playerScore = calculateScore(playerCards);
+                const dealerScore = calculateScore(dealerCards);
+                endGame('Blackjack! Gewonnen! +' + currentBet + ' 🎉', 'win');
+                
+                setTimeout(() => {
+                    showResultOverlay('win', playerScore, dealerScore);
+                }, 1500);
+            }
+        }
+
+        function hit() {
+            if (gameOver || isDealerDrawing) return;
+            
+            playerCards.push(deck.pop());
+            updateDisplay({ newPlayerCard: true });
+            
+            const playerScore = calculateScore(playerCards);
+            if (playerScore > 21) {
+                balance -= currentBet;
+                updateBalanceDisplay();
+                const dealerScore = calculateScore(dealerCards);
+                endGame('Je bent kapot! -' + currentBet + ' 😔', 'loss');
+                
+                setTimeout(() => {
+                    showResultOverlay('loss', playerScore, dealerScore);
+                }, 1500);
+            } else if (playerScore === 21) {
+                stand();
+            }
+        }
+
+        function stand() {
+            if (gameOver || isDealerDrawing) return;
+            
+            isDealerDrawing = true;
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            
+            gameOver = true;
+            const wasHidden = dealerHiddenCard;
+            dealerHiddenCard = false;
+            
+            // Onthul alleen de verborgen kaart
+            updateDisplay({ revealDealerCard: wasHidden });
+            
+            setTimeout(() => {
+                dealerDrawSequence();
+            }, 1000);
+        }
+
+        function dealerDrawSequence() {
+            if (calculateScore(dealerCards) < 17) {
+                if (deck.length === 0) createDeck();
+                dealerCards.push(deck.pop());
+                updateDisplay({ newDealerCard: true });
+                
+                setTimeout(() => {
+                    dealerDrawSequence();
+                }, 800);
+            } else {
+                setTimeout(() => {
+                    finalizeGame();
+                }, 2000);
+            }
+        }
+
+        function finalizeGame() {
+            const playerScore = calculateScore(playerCards);
+            const dealerScore = calculateScore(dealerCards);
+            
+            let message = '';
+            let result = '';
+            
+            if (dealerScore > 21) {
+                balance += currentBet;
+                message = 'Dealer kapot! +' + currentBet + ' 🎉';
+                result = 'win';
+            } else if (playerScore > dealerScore) {
+                balance += currentBet;
+                message = 'Gewonnen! +' + currentBet + ' 🎉';
+                result = 'win';
+            } else if (dealerScore > playerScore) {
+                balance -= currentBet;
+                message = 'Verloren! -' + currentBet + ' 😔';
+                result = 'loss';
+            } else {
+                message = 'Gelijkspel! Inzet behouden 🤝';
+                result = 'push';
+            }
+            
+            updateBalanceDisplay();
+            endGame(message, result);
+            
+            showResultOverlay(result, playerScore, dealerScore);
+            
+            isDealerDrawing = false;
+        }
+
+        function endGame(message = '', result = '') {
+            gameOver = true;
+            dealerHiddenCard = false;
+            
+            // Update scores zonder kaarten opnieuw te renderen
+            document.getElementById('player-score').textContent = calculateScore(playerCards);
+            document.getElementById('dealer-score').textContent = calculateScore(dealerCards);
+            
+            document.getElementById('message').textContent = message;
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            document.getElementById('new-game-btn').disabled = false;
+            
+            document.getElementById('player-section').classList.remove('active');
+            document.getElementById('dealer-section').classList.remove('active');
+            
+            if (result === 'win') {
+                document.getElementById('player-section').classList.add('active');
+            } else if (result === 'loss') {
+                document.getElementById('dealer-section').classList.add('active');
+            }
+            
+            if (balance <= 0) {
+                document.getElementById('message').textContent += ' Game Over! Reset om opnieuw te spelen.';
+                document.getElementById('new-game-btn').disabled = true;
+            }
+            
+            document.getElementById('current-bet-display').textContent = '-';
+            
+            console.log('Spel afgelopen. Resultaat: ' + result + ', Saldo: ' + balance);
+        }
+
+        function resetGame() {
+            balance = 20;
+            currentBet = 1;
+            gameOver = true;
+            isDealerDrawing = false;
+            
+            if (resultTimeout) clearTimeout(resultTimeout);
+            document.getElementById('result-overlay').classList.add('hidden');
+            
+            updateBalanceDisplay();
+            hideBettingOverlay();
+            
+            document.getElementById('message').textContent = 'Spel gereset! 20 punten.';
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            document.getElementById('new-game-btn').disabled = false;
+            document.getElementById('current-bet-display').textContent = '-';
+            
+            document.getElementById('dealer-cards').innerHTML = '';
+            document.getElementById('player-cards').innerHTML = '';
+            document.getElementById('dealer-score').textContent = '0';
+            document.getElementById('player-score').textContent = '0';
+            
+            document.getElementById('player-section').classList.add('active');
+            document.getElementById('dealer-section').classList.add('active');
+            
+            console.log('Spel gereset. Saldo: ' + balance);
+            
+            setTimeout(() => {
+                if (balance > 0) {
+                    showBettingOverlay();
+                }
+            }, 300);
+        }
+
+        // Initialiseer het spel
+        updateBalanceDisplay();
+        document.getElementById('hit-btn').disabled = true;
+        document.getElementById('stand-btn').disabled = true;
+        document.getElementById('new-game-btn').disabled = true;
+        
+        showBettingOverlay();
+        
+        console.log('Spel geïnitialiseerd. Saldo: ' + balance);
+    </script>
+</body>
+</html>

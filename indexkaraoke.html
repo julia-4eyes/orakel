@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MuziekLinks | Hover info + Karaoke knop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fc 0%, #e9eef4 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1a2634;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.3rem;
+            background: linear-gradient(135deg, #1e2a3a, #0f172a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .sub {
+            color: #4b5c6e;
+            font-weight: 500;
+            border-bottom: 2px solid #cbd5e1;
+            display: inline-block;
+            padding-bottom: 0.25rem;
+        }
+
+        /* ZOEKBALK */
+        .search-section {
+            background: white;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05), 0 2px 6px rgba(0,0,0,0.03);
+            margin-bottom: 2rem;
+            padding: 0.3rem 0.3rem 0.3rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .search-input-wrapper {
+            flex: 4;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-icon {
+            font-size: 1.3rem;
+            color: #7c8a9a;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 0.9rem 0;
+            font-size: 1rem;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-weight: 500;
+            color: #0f1822;
+        }
+
+        #searchInput::placeholder {
+            color: #a0abb8;
+            font-weight: normal;
+        }
+
+        .search-badge {
+            background: #eef2ff;
+            border-radius: 30px;
+            padding: 0.3rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2c3e66;
+            white-space: nowrap;
+        }
+
+        .reset-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 0.8rem;
+            color: #6c7a8e;
+            transition: 0.2s;
+        }
+
+        .reset-btn:hover {
+            color: #dc2626;
+            transform: scale(1.05);
+        }
+
+        /* categorie filters */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .cat-filter-btn {
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            border: 1px solid #cddfe7;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e2f3f;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+
+        .cat-filter-btn.active {
+            background: #1e2f3f;
+            border-color: #1e2f3f;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .cat-filter-btn:hover:not(.active) {
+            background: #e2e8f0;
+            border-color: #b9cad6;
+        }
+
+        /* stats */
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .result-count {
+            font-size: 0.85rem;
+            background: #eef2f5;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .add-link-hint {
+            font-size: 0.8rem;
+            color: #3e6b8c;
+        }
+
+        /* categorie grid */
+        .categories-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(2px);
+            border-radius: 28px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.6);
+        }
+
+        .category-header {
+            padding: 1rem 1.8rem;
+            background: #ffffffd9;
+            border-bottom: 1px solid #e2edf2;
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .category-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(120deg, #1f3b4c, #1f2c38);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .category-badge {
+            background: #eef3fc;
+            border-radius: 30px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2c4b6e;
+        }
+
+        .links-list {
+            list-style: none;
+            padding: 0.8rem 1rem 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        /* ---- Link item met hover effect en overlay ---- */
+        .link-item {
+            background: white;
+            border-radius: 20px;
+            padding: 0.9rem 1.2rem;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            border: 1px solid #eef3f8;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Hover effect: lichte schaduw en opschalen */
+        .link-item:hover {
+            transform: translateY(-3px) scale(1.01);
+            border-color: #c0d4e2;
+            background: #ffffff;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        /* Overlay (initieel verborgen) */
+        .link-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            font-family: 'Segoe UI', system-ui;
+        }
+
+        .link-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .overlay-card {
+            background: linear-gradient(135deg, #ffffff, #fef9f0);
+            max-width: 480px;
+            width: 90%;
+            border-radius: 2rem;
+            padding: 1.8rem 2rem 2rem;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: fadeSlideUp 0.3s ease-out;
+            border: 1px solid rgba(255,215,150,0.5);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .overlay-card h3 {
+            font-size: 1.8rem;
+            color: #1f3b4c;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid #ffcd94;
+            display: inline-block;
+            padding-bottom: 0.2rem;
+        }
+
+        .overlay-artist {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #b45f2b;
+            margin: 0.8rem 0 0.3rem;
+        }
+
+        .overlay-album, .overlay-song {
+            font-size: 0.95rem;
+            color: #2d4a6e;
+            background: #eef3fc;
+            display: inline-block;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            margin: 0.3rem;
+        }
+
+        .overlay-desc {
+            margin: 1rem 0 1.5rem;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            background: #fef5e8;
+            padding: 0.8rem;
+            border-radius: 1.2rem;
+            line-height: 1.4;
+        }
+
+        .karaoke-btn {
+            background: #2c7a47;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 0.7rem 1.6rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin: 0.5rem 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .karaoke-btn:hover {
+            background: #1e5a36;
+            transform: scale(1.02);
+        }
+
+        .close-overlay-btn {
+            background: #8b6c42;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            margin-top: 0.8rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .close-overlay-btn:hover {
+            background: #5e4a2e;
+        }
+
+        .youtube-btn {
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 0.55rem 1.3rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .youtube-btn:hover {
+            background: #cc0000;
+            transform: scale(1.02);
+        }
+
+        .link-info {
+            flex: 3;
+            min-width: 180px;
+            pointer-events: none;
+        }
+
+        .link-name {
+            font-weight: 800;
+            font-size: 1.05rem;
+            color: #0b2b3b;
+            display: inline-block;
+            margin-right: 0.8rem;
+        }
+
+        .link-artist {
+            font-size: 0.85rem;
+            color: #4f6f8a;
+            background: #f0f4fa;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            display: inline-block;
+            margin-top: 3px;
+        }
+
+        .link-song {
+            font-size: 0.8rem;
+            color: #6e8faa;
+            margin-left: 0.4rem;
+            font-style: italic;
+        }
+
+        .link-album {
+            font-size: 0.75rem;
+            color: #2c7a5e;
+            background: #e0f2e9;
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 20px;
+            margin-left: 0.5rem;
+        }
+
+        .no-categories-message {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 40px;
+            margin-top: 1rem;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.03);
+            color: #57758c;
+        }
+
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6f8aa3;
+            border-top: 1px solid #d4e2ec;
+            padding-top: 1.5rem;
+        }
+
+        @media (max-width: 680px) {
+            body { padding: 1.2rem; }
+            .category-header { padding: 0.8rem 1rem; }
+            .link-item { flex-direction: column; align-items: flex-start; }
+            .youtube-btn { align-self: flex-start; margin-top: 6px; }
+            .overlay-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🎵 MuziekLink archief</h1>
+        <p class="sub">Amsterdams volkszang · Pop · Rock · Hover voor info & karaoke</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-input-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" placeholder="Zoek op artiest, nummer, album of categorie..." autocomplete="off">
+        </div>
+        <div class="search-badge">🎤 hover & info</div>
+        <button class="reset-btn" id="resetSearchBtn" title="Wis zoekopdracht">✖️</button>
+    </div>
+
+    <div class="category-filters" id="categoryFilterContainer">
+        <button data-cat="all" class="cat-filter-btn active">Alle categorieën</button>
+        <button data-cat="Amsterdams volkszang" class="cat-filter-btn">🎶 Amsterdams volkszang</button>
+        <button data-cat="Pop" class="cat-filter-btn">🎤 Pop</button>
+        <button data-cat="Rock" class="cat-filter-btn">🎸 Rock</button>
+    </div>
+
+    <div class="stats-bar">
+        <span class="result-count" id="resultCount">0 links gevonden</span>
+        <span class="add-link-hint">✨ Hover over een nummer → krijg een info-venster met karaoke-knop</span>
+    </div>
+
+    <div id="categoriesContainer" class="categories-grid"></div>
+    <footer>
+        📌 Klik op een nummer (hover effect) om de beschrijving te zien. Daarin staat een knop "Naar Karaoke tekst" die verwijst naar ./karaoke.html
+    </footer>
+</div>
+
+<!-- Overlay structuur (verborgen tot hover) -->
+<div id="infoOverlay" class="link-overlay">
+    <div class="overlay-card">
+        <h3 id="overlayTitle">Titel</h3>
+        <div id="overlayArtist" class="overlay-artist"></div>
+        <div>
+            <span id="overlayAlbum" class="overlay-album"></span>
+            <span id="overlaySong" class="overlay-song"></span>
+        </div>
+        <div id="overlayDesc" class="overlay-desc">
+            📖 Beschrijving: een meeslepende versie van dit nummer.
+        </div>
+        <button id="karaokeNavBtn" class="karaoke-btn">🎤 Naar Karaoke tekst 🎶</button><br>
+        <button id="closeOverlayBtn" class="close-overlay-btn">Sluiten ✖</button>
+    </div>
+</div>
+
+<script>
+    // -------------------- DATABASE MET BESCHRIJVINGEN --------------------
+    const linksDatabase = [
+        // Amsterdams volkszang
+        { id: 1, title: "Een Beetje Verliefd", artist: "André Hazes", song: "Een Beetje Verliefd", album: "Voor Jou", url: "https://www.youtube.com/watch?v=wHTOeEbfQ30", category: "Amsterdams volkszang", description: "Klassieker van de volkszang; over romantiek en Amsterdamse levensvreugde." },
+        { id: 2, title: "Tulpen uit Amsterdam", artist: "Manke Nelis", song: "Tulpen uit Amsterdam", album: "Tulpen uit Amsterdam", url: "https://www.youtube.com/watch?v=O2gP9jPRi8E", category: "Amsterdams volkszang", description: "Liefde voor de stad en bloemen, een nostalgisch levenslied." },
+        { id: 3, title: "Geef mij maar Amsterdam", artist: "Johnny Jordaan", song: "Geef mij maar Amsterdam", album: "Amsterdamse Nachten", url: "https://www.youtube.com/watch?v=fJ1_UuW0WBM", category: "Amsterdams volkszang", description: "Trots Amsterdam-lied met grappige en warme teksten over de stad." },
+        { id: 4, title: "Oh, Amsterdam", artist: "Tante Leen", song: "Oh, Amsterdam", album: "Levensliederen", url: "https://www.youtube.com/watch?v=7a9S1lTpQbU", category: "Amsterdams volkszang", description: "Eerbetoon aan de Jordaan, gezongen met karakteristieke stem." },
+        { id: 5, title: "Aan de Amsterdamse grachten", artist: "Willy Alberti", song: "Aan de Amsterdamse grachten", album: "Mijn Amsterdam", url: "https://www.youtube.com/watch?v=F7gU12A3x9I", category: "Amsterdams volkszang", description: "Romantische ode aan de grachtenpracht van Amsterdam." },
+        { id: 6, title: "Mijn Amsterdam, mijn roezemoes", artist: "Jenny Arean", song: "Mijn Amsterdam, mijn roezemoes", album: "Amsterdams Parfum", url: "https://www.youtube.com/watch?v=HcXNPIEdGv4", category: "Amsterdams volkszang", description: "Jenny Areans prachtige ode aan de gezelligheid en tumult van Amsterdam. Van album Amsterdams Parfum." },
+        
+        // Pop
+        { id: 7, title: "Zoutelande", artist: "BLØF (met Geike Arnaert)", song: "Zoutelande", album: "Zoutelande", url: "https://www.youtube.com/watch?v=HqF_8x1xJkY", category: "Pop", description: "Nederlandse pophit over de liefde aan de kust. Meeslepende melodie." },
+        { id: 8, title: "Arcade", artist: "Duncan Laurence", song: "Arcade", album: "Small Town Boy", url: "https://www.youtube.com/watch?v=SeQsZQSlqms", category: "Pop", description: "Eurovisie winnende ballad vol emotie en dromerige klanken." },
+        { id: 9, title: "Duurt te lang", artist: "Davina Michelle", song: "Duurt te lang", album: "Duurt te lang", url: "https://www.youtube.com/watch?v=k-6tBwEbr0A", category: "Pop", description: "Krachtige popstem over verlangen en geduld." },
+        { id: 10, title: "Nooduitgang", artist: "Goldband", song: "Nooduitgang", album: "Betaalbare Romantiek", url: "https://www.youtube.com/watch?v=NG5KqlCHL5Q", category: "Pop", description: "Upbeat indiepop met relatable teksten over ontsnappen." },
+        { id: 11, title: "Groter dan ik", artist: "Froukje", song: "Groter dan ik", album: "Uitzinnig", url: "https://www.youtube.com/watch?v=z-3YltF76gU", category: "Pop", description: "Intiem en poëtisch, moderne Nederpop." },
+        { id: 12, title: "Hollereer", artist: "S10", song: "Hollereer", album: "De Leven", url: "https://www.youtube.com/watch?v=Jt0hTvOM13Q", category: "Pop", description: "Alternatieve pop met diepe teksten." },
+        
+        // Rock
+        { id: 13, title: "Soldier On", artist: "DI-RECT", song: "Soldier On", album: "Rolling with the Punches", url: "https://www.youtube.com/watch?v=Jx7dObRI94Q", category: "Rock", description: "Energieke rockgitaar en strijdlustige tekst." },
+        { id: 14, title: "War", artist: "Kensington", song: "War", album: "Rivals", url: "https://www.youtube.com/watch?v=1N_CoJhuHAE", category: "Rock", description: "Rock anthem met pakkende refreinen." },
+        { id: 15, title: "Nobody's Wife", artist: "Anouk", song: "Nobody's Wife", album: "Together Alone", url: "https://www.youtube.com/watch?v=JSc4Xy_jcQU", category: "Rock", description: "Internationale rockhit, sterke vrouwenstem." },
+        { id: 16, title: "Ice Queen", artist: "Within Temptation", song: "Ice Queen", album: "Mother Earth", url: "https://www.youtube.com/watch?v=k0jQGy_5pzs", category: "Rock", description: "Symfonische rock klassieker." },
+        { id: 17, title: "Tom Boy", artist: "Bettie Serveert", song: "Tom Boy", album: "Palomine", url: "https://www.youtube.com/watch?v=DOztyR9oH4Q", category: "Rock", description: "Alternative rock uit de jaren 90." },
+        { id: 18, title: "Love You More", artist: "Racoon", song: "Love You More", album: "All in Good Time", url: "https://www.youtube.com/watch?v=W4C5hZI1DbA", category: "Rock", description: "Akoestische rockballade over liefde." }
+    ];
+
+    const ALL_CATEGORY_KEYS = ["Amsterdams volkszang", "Pop", "Rock"];
+    const CATEGORY_DISPLAY = {
+        "Amsterdams volkszang": "🎶 Amsterdams volkszang",
+        "Pop": "🎤 Pop",
+        "Rock": "🎸 Rock"
+    };
+
+    // DOM elementen
+    const searchInput = document.getElementById('searchInput');
+    const resetBtn = document.getElementById('resetSearchBtn');
+    const categoryFilterBtns = document.querySelectorAll('.cat-filter-btn');
+    const categoriesContainer = document.getElementById('categoriesContainer');
+    const resultCountSpan = document.getElementById('resultCount');
+    const overlay = document.getElementById('infoOverlay');
+    const overlayTitle = document.getElementById('overlayTitle');
+    const overlayArtistSpan = document.getElementById('overlayArtist');
+    const overlayAlbumSpan = document.getElementById('overlayAlbum');
+    const overlaySongSpan = document.getElementById('overlaySong');
+    const overlayDescSpan = document.getElementById('overlayDesc');
+    const karaokeNavBtn = document.getElementById('karaokeNavBtn');
+    const closeOverlayBtn = document.getElementById('closeOverlayBtn');
+
+    let activeCategoryFilter = 'all';
+    let searchTerm = '';
+
+    // Huidige geopende link data (voor karaoke knop)
+    let currentOverlayLink = null;
+
+    // Normalize & zoekfuncties
+    function normalizeText(str) {
+        if (!str) return '';
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function matchesSearch(link, term) {
+        if (!term) return true;
+        const lowerTerm = term.toLowerCase();
+        const normTerm = normalizeText(term);
+        const searchableRaw = [link.category, link.artist, link.song, link.album || '', link.title].join(' ').toLowerCase();
+        const searchableNorm = normalizeText(searchableRaw);
+        return searchableRaw.includes(lowerTerm) || searchableNorm.includes(normTerm);
+    }
+
+    function getFilteredLinks() {
+        let filtered = [...linksDatabase];
+        if (activeCategoryFilter !== 'all') {
+            filtered = filtered.filter(link => link.category === activeCategoryFilter);
+        }
+        if (searchTerm.trim() !== '') {
+            filtered = filtered.filter(link => matchesSearch(link, searchTerm));
+        }
+        return filtered;
+    }
+
+    function getNonEmptyCategoriesGrouped(filteredLinks) {
+        const groups = {};
+        ALL_CATEGORY_KEYS.forEach(cat => { groups[cat] = []; });
+        filteredLinks.forEach(link => { groups[link.category].push(link); });
+        const nonEmpty = {};
+        for (const [cat, items] of Object.entries(groups)) {
+            if (items.length > 0) nonEmpty[cat] = items;
+        }
+        return nonEmpty;
+    }
+
+    // Overlay tonen met info uit link-object
+    function showOverlayForLink(link) {
+        currentOverlayLink = link;
+        overlayTitle.innerText = link.title || "Nummer";
+        overlayArtistSpan.innerText = `🎤 ${link.artist || "Onbekende artiest"}`;
+        overlayAlbumSpan.innerText = link.album ? `💿 ${link.album}` : "Onbekend album";
+        overlaySongSpan.innerText = link.song ? `🎵 ${link.song}` : "";
+        let descriptionText = link.description || `Beluister "${link.title}" van ${link.artist}. Een prachtig nummer uit de categorie ${link.category}.`;
+        overlayDescSpan.innerHTML = `📖 ${descriptionText}`;
+        overlay.classList.add('active');
+    }
+
+    function hideOverlay() {
+        overlay.classList.remove('active');
+        currentOverlayLink = null;
+    }
+
+    // Karaoke navigatie: verwijst naar ./karaoke.html (eventueel met query parameter)
+    function navigateToKaraoke() {
+        window.location.href = "./karaoke.html";
+    }
+
+    // YouTube knop handler (aparte, blijft werken)
+    function attachYoutubeButtons() {
+        document.querySelectorAll('.youtube-btn:not(.has-listener)').forEach(btn => {
+            btn.classList.add('has-listener');
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const url = btn.getAttribute('data-url');
+                if (url) window.open(url, '_blank', 'noopener,noreferrer');
+            });
+        });
+    }
+
+    // Hover + click overlay toevoegen aan elk link-item
+    function attachOverlayTriggers() {
+        const linkItems = document.querySelectorAll('.link-item');
+        linkItems.forEach(item => {
+            // haal opgeslagen link id op uit data attribute (we zetten data-link-id)
+            const linkId = item.getAttribute('data-link-id');
+            if (linkId) {
+                const linkObj = linksDatabase.find(l => l.id == linkId);
+                if (linkObj) {
+                    // hover effect toont overlay (mouseenter)
+                    item.addEventListener('mouseenter', (e) => {
+                        showOverlayForLink(linkObj);
+                    });
+                    // Optioneel: hover weg? we sluiten niet automatisch bij mouseleave, want gebruiker kan interactie hebben met overlay.
+                    // We sluiten enkel via sluiten knop of klik op overlay-close. Voor UX blijven we tot sluitknop.
+                }
+            }
+        });
+    }
+
+    // Render hoofdpagina
+    function render() {
+        const filteredLinks = getFilteredLinks();
+        const grouped = getNonEmptyCategoriesGrouped(filteredLinks);
+        const totalResults = filteredLinks.length;
+        resultCountSpan.innerText = `${totalResults} ${totalResults === 1 ? 'link' : 'links'} gevonden`;
+
+        if (totalResults === 0) {
+            categoriesContainer.innerHTML = `<div class="no-categories-message">🕵️ Geen nummers gevonden voor "${escapeHtml(searchTerm) || 'deze zoekopdracht'}".</div>`;
+            updateActiveCategoryButtons();
+            return;
+        }
+
+        let html = '';
+        for (const [catKey, linksInCat] of Object.entries(grouped)) {
+            const displayName = CATEGORY_DISPLAY[catKey] || catKey;
+            html += `<div class="category-card"><div class="category-header"><span class="category-title">${escapeHtml(displayName)}</span><span class="category-badge">${linksInCat.length} items</span></div><ul class="links-list">`;
+            for (const link of linksInCat) {
+                const albumBadge = link.album ? `<span class="link-album">💿 ${escapeHtml(link.album)}</span>` : '';
+                html += `
+                    <li class="link-item" data-link-id="${link.id}">
+                        <div class="link-info">
+                            <div class="link-name">${escapeHtml(link.title)} ${albumBadge}</div>
+                            <div class="link-artist">${escapeHtml(link.artist)}</div>
+                            ${link.song ? `<span class="link-song">🎵 ${escapeHtml(link.song)}</span>` : ''}
+                        </div>
+                        <button class="youtube-btn" data-url="${escapeHtml(link.url)}">▶️ YouTube</button>
+                    </li>
+                `;
+            }
+            html += `</ul></div>`;
+        }
+        categoriesContainer.innerHTML = html;
+        attachYoutubeButtons();
+        attachOverlayTriggers();
+        updateActiveCategoryButtons();
+    }
+
+    function updateActiveCategoryButtons() {
+        categoryFilterBtns.forEach(btn => {
+            const val = btn.getAttribute('data-cat');
+            if ((val === 'all' && activeCategoryFilter === 'all') || val === activeCategoryFilter) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+
+    // Event listeners
+    searchInput.addEventListener('input', (e) => { searchTerm = e.target.value; render(); });
+    resetBtn.addEventListener('click', () => { searchInput.value = ''; searchTerm = ''; render(); });
+    categoryFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const val = btn.getAttribute('data-cat');
+            activeCategoryFilter = val === 'all' ? 'all' : val;
+            render();
+        });
+    });
+    closeOverlayBtn.addEventListener('click', hideOverlay);
+    karaokeNavBtn.addEventListener('click', navigateToKaraoke);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) hideOverlay(); });
+
+    render();
+</script>
+</body>
+</html>
